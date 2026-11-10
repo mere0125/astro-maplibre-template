@@ -8,10 +8,10 @@
     await mapElement.mapReady();
     const map = mapElement.getMap();
     const buttons = [...document.querySelectorAll("[data-map-view]")];
+    const compact = window.innerWidth < 640;
+    if (compact) document.querySelector(".map-key")?.removeAttribute("open");
     const show = (view) => {
       buttons.forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.mapView === view)));
-      const compact = window.innerWidth < 640;
-
       if (view === "study") {
         map.fitBounds(
           [[-73.8990, 40.6632], [-73.8716, 40.6774]],
