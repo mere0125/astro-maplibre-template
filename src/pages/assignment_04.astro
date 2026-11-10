@@ -25,7 +25,7 @@ import "../styles/assignment04.css";
         </div>
 
         <section id="city-reading" class="city-reading">
-          <h2>One label, many places.</h2>
+          <h2>Vacant land, 2026</h2>
           <p>The 2026 PLUTO release records <strong>24,663 vacant tax lots</strong> across the five boroughs. This map can locate 24,213 of them. The remaining records have missing or empty boundaries.</p>
           <p>The pale green shapes are administrative records. Their colour does not say whether the land is bare, overgrown, accessible, or forested.</p>
           <div id="borough-list" class="borough-list" aria-label="Vacant tax lots by borough"></div>
@@ -34,7 +34,7 @@ import "../styles/assignment04.css";
         </section>
 
         <section id="study-reading" class="study-reading" hidden>
-          <h2>At the scale of a lot.</h2>
+          <h2>The East New York sample</h2>
           <p>254 matched vacant parcels formed the pilot screening set. The 36 largest were read against two archival years; 14 had histories suitable for this descriptive comparison with 2022 imagery.</p>
 
           <fieldset class="field-filter">
@@ -63,7 +63,7 @@ import "../styles/assignment04.css";
           </div>
 
           <div class="list-heading"><p id="sample-count" role="status" aria-live="polite">14 parcels in view</p><button id="clear-filters" type="button">reset</button></div>
-          <p class="list-instruction">Choose an address, or click a dark-outlined parcel on the map.</p>
+          <p class="list-instruction">Choose an address or a dark-outlined parcel. The list runs from higher to lower vegetation response.</p>
           <div id="parcel-list" class="parcel-list" aria-label="Analysed parcels"></div>
           <p id="no-parcels" class="empty-reading" hidden>No sampled parcels match both choices. Reset the filters to return to all 14.</p>
           <p class="marginal-note">The sample is deliberately selected. These fourteen lots cannot represent the city as a whole.</p>
@@ -136,11 +136,13 @@ import "../styles/assignment04.css";
             <div><span>2018 - image</span><strong id="status-2018"></strong></div>
             <div><span>2026 - record</span><strong>coded vacant</strong></div>
           </div>
+          <div class="parcel-measure"><p><strong id="vegetation-value"></strong><span>of valid parcel pixels above NDVI 0.20 in 2022</span></p><div class="response-track" aria-hidden="true"><span id="response-fill"></span></div><p class="response-detail" id="response-detail"></p></div>
           <div class="image-modes" aria-label="Choose evidence imagery">
             <button type="button" data-evidence="archive" aria-pressed="true">1996 to 2018</button>
             <button type="button" data-evidence="2022" aria-pressed="false">the 2022 surface</button>
           </div>
           <div class="image-pair" id="image-pair">
+            <p class="image-loading" id="image-loading" role="status">Loading the dated images…</p>
             <img id="image-back" alt="" />
             <div class="image-front" id="image-front"><img id="image-front-img" alt="" /></div>
             <div class="image-seam" id="image-seam" aria-hidden="true"></div>
@@ -150,7 +152,6 @@ import "../styles/assignment04.css";
           </div>
           <p class="image-caption" id="image-caption">Move the divider to compare the same ground extent. The thin outline locates the present-day parcel.</p>
           <div class="pixel-key" id="pixel-key" hidden><p>pixel NDVI - a different scale from the parcel legend</p><div></div><p><span>−0.2</span><span>0.2</span><span>0.8</span></p></div>
-          <div class="parcel-measure"><p><strong id="vegetation-value"></strong><span>of valid parcel pixels above NDVI 0.20 in 2022</span></p><div class="response-track" aria-hidden="true"><span id="response-fill"></span></div><p class="response-detail" id="response-detail"></p></div>
           <p class="parcel-caution">An image reading of the surface - not a survey of trees or habitat.</p>
         </section>
         <p class="map-projection">Web Mercator - EPSG 3857</p>

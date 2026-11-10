@@ -51,6 +51,9 @@
 .field-byline { margin: 0 0 15px; color: #6b7a63; font-size: 12px; letter-spacing: 0.03em; }
 .assignment-four .field-brand h1 { margin: 0; font-size: 43px; line-height: 0.94; letter-spacing: -0.045em; }
 .field-intro { margin: 23px 0 18px; font-size: 15px; line-height: 1.47; max-width: 260px; }
+.field-index.is-study .field-intro { display: none; }
+.assignment-four .field-index.is-study .field-brand h1 { font-size: 35px; }
+.field-index.is-study .field-scales { margin-top: 18px; }
 .field-scales { display: flex; gap: 20px; margin-top: 22px; border-bottom: 1px solid #a9b69f; }
 .field-scales button { padding: 0 0 8px; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; background: none; color: #77816e; font-size: 14px; }
 .field-scales button[aria-pressed="true"] { color: var(--ink); border-bottom-color: #54714f; }
@@ -108,14 +111,14 @@
 .north-control svg { width: 16px; height: 24px; fill: #6e8461; }
 .assignment-four .map-key { position: absolute; bottom: 65px; left: 27px; width: 231px; padding: 13px 16px 14px; border: 1px solid #b9c3ad; border-radius: 1px 17px 2px 1px; background: #f6f4e9ed; box-shadow: none; color: #486045; z-index: 2; backdrop-filter: blur(5px); }
 .map-key .key-title { font-size: 15px; margin: 0 0 9px; }
-.map-key .atlas-key-row { display: flex; align-items: center; gap: 9px; font-size: 11px; line-height: 1.2; margin: 7px 0; }
+.map-key .atlas-key-row { display: flex; align-items: center; gap: 9px; font-size: 12px; line-height: 1.25; margin: 7px 0; }
 .atlas-key-row > i { display: inline-block; flex-shrink: 0; background: var(--swatch); width: 14px; height: 9px; border: 1px solid #89997c70; }
 .atlas-key-row .city-patch { background: #78906a; }
 .atlas-key-row .key-window { background: #d8b88d20; border-color: #b28d6b; border-style: dashed; }
 .atlas-key-row .key-stroke { background: transparent; border: none; height: 0; border-top: 2px solid; }
 .atlas-key-row .old-stroke { border-color: #42634d; }
 .atlas-key-row .recent-stroke { border-color: #b47e60; }
-.map-key .vegetation-key > p { font-size: 10px; color: #7d8974; margin: 5px 0 11px; line-height: 1.3; }
+.map-key .vegetation-key > p { font-size: 11px; color: #738467; margin: 5px 0 11px; line-height: 1.3; }
 .map-key .vegetation-key > .key-subtitle { border-top: 1px solid #bdc8b3; padding-top: 9px; margin: 12px 0 9px; }
 .map-key .context-key { margin-top: 11px; color: #829079; }
 .map-loading { position: absolute; top: 110px; left: 28px; font-size: 13px; color: #7c8c72; background: #f5f4e8c4; padding: 7px 10px; border-radius: 2px; }
@@ -128,40 +131,42 @@
 
 .parcel-sheet { position: absolute; top: 99px; right: 72px; z-index: 5; width: 338px; max-height: calc(100% - 137px); overflow: auto; padding: 20px 19px 17px; border: 1px solid #b7c3ac; background-color: #f6f4e9f7; background-image: linear-gradient(153deg, #edf2e3a8, transparent 37%); border-radius: 2px 18px 2px 2px; box-shadow: 0 13px 45px #4d674a17; scrollbar-width: thin; scrollbar-color: #b7c6a9 transparent; }
 .close-parcel { position: absolute; top: 9px; right: 11px; padding: 1px 5px; border: 0; background: none; font-size: 23px !important; line-height: 1; color: #788a6a !important; }
-.parcel-heading-note { margin: 0 0 5px; font-size: 10px; color: #849277; }
+.parcel-heading-note { margin: 0 0 5px; font-size: 11px; color: #75866a; }
 .assignment-four .parcel-sheet h2 { margin: 0 20px 3px 0; font-size: 22px; line-height: 1.06; letter-spacing: -0.02em; }
-.parcel-identification { margin: 8px 0 16px; font-size: 10px; color: #839175; }
+.parcel-identification { margin: 8px 0 16px; font-size: 11px; color: #74866a; }
 .record-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 11px 0 10px; border-top: 1px solid #bbc8b1; border-bottom: 1px solid #bbc8b1; }
 .record-strip > div { display: flex; flex-direction: column; gap: 5px; }
-.record-strip span { font-size: 9px; color: #8b957f; }
-.record-strip strong { font-size: 12px; font-weight: 400; color: #5c7451; }
+.record-strip span { font-size: 10px; color: #7c8a6f; }
+.record-strip strong { font-size: 13px; font-weight: 400; color: #516b46; }
 .image-modes { display: flex; justify-content: space-between; gap: 8px; margin: 16px 0 9px; }
-.image-modes button { border: 0; padding: 2px 0 4px; border-bottom: 1px solid transparent; background: none; font-size: 11px; color: #87967a; }
+.image-modes button { border: 0; padding: 2px 0 4px; border-bottom: 1px solid transparent; background: none; font-size: 12px; color: #748967; }
 .image-modes button[aria-pressed="true"] { color: #4c6a45; border-bottom-color: #6f895f; }
 .image-pair { position: relative; width: 100%; aspect-ratio: 1/1; background: #e4e9da; overflow: hidden; }
 .image-pair img { display: block; width: 100%; height: 100%; max-width: none; object-fit: cover; }
+.image-loading { position: absolute; inset: 0; z-index: 1; margin: 0; display: flex; align-items: center; justify-content: center; padding: 20px; text-align: center; color: #74896a; font-size: 12px; }
 .image-front { position: absolute; top: 0; left: 0; bottom: 0; width: 100%; clip-path: inset(0 50% 0 0); }
 .image-front img { width: 100%; }
 .image-seam { position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: #fbf8e9; box-shadow: 0 0 0 1px #4d62434d; pointer-events: none; }
 .image-seam::after { content: "↔"; position: absolute; top: calc(50% - 12px); left: -12px; width: 25px; height: 25px; padding-top: 2px; text-align: center; border-radius: 50%; color: #59734e; background: #f5f4e9eb; border: 1px solid #9bae8b; font-size: 13px; }
-.image-label { position: absolute; top: 8px; background: #f7f5ebd9; font-size: 10px; padding: 2px 6px; color: #536c4b; pointer-events: none; }
+.image-label { position: absolute; top: 8px; background: #f7f5ebed; font-size: 11px; padding: 2px 6px; color: #536c4b; pointer-events: none; }
 .image-label.left { left: 8px; }
 .image-label.right { right: 8px; }
 .image-pair > input { position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; opacity: 0; margin: 0; cursor: ew-resize; }
 .image-pair:has(input:focus-visible) { outline: 2px solid #708a60; outline-offset: 3px; }
-.image-caption { font-size: 10px; line-height: 1.4; color: #87947c; margin: 8px 0 16px; }
+.image-caption { font-size: 11px; line-height: 1.4; color: #708367; margin: 8px 0 16px; }
+.parcel-measure { margin-top: 15px; }
 .parcel-measure > p:first-child { display: flex; align-items: center; gap: 12px; margin: 0 0 7px; }
 .parcel-measure strong { font-size: 31px; line-height: 1; letter-spacing: -0.04em; font-weight: 400; color: #5c7b4e; }
-.parcel-measure p > span { font-size: 10px; color: #7c8d70; max-width: 155px; line-height: 1.25; }
+.parcel-measure p > span { font-size: 11px; color: #708565; max-width: 174px; line-height: 1.3; }
 .response-track { height: 5px; background: #e2e7d7; overflow: hidden; border-radius: 1px; }
 .response-track > span { display: block; height: 100%; background: #89a575; }
-.response-detail { margin: 6px 0 0; font-size: 10px; color: #829375; }
+.response-detail { margin: 6px 0 0; font-size: 11px; color: #748a66; }
 .pixel-key { margin: -3px 0 15px; }
-.pixel-key > p:first-child { margin: 0 0 5px; color: #7d8c70; font-size: 9px; }
+.pixel-key > p:first-child { margin: 0 0 5px; color: #708263; font-size: 10px; }
 .pixel-key > div { height: 5px; background: linear-gradient(90deg, #e1dac9 0%, #d4dcc2 40%, #9db58d 60%, #5b855e 80%, #265339 100%); }
-.pixel-key > p:last-child { position: relative; margin: 2px 0 0; display: flex; justify-content: space-between; font-size: 9px; color: #7d8c70; }
+.pixel-key > p:last-child { position: relative; margin: 2px 0 0; display: flex; justify-content: space-between; font-size: 10px; color: #708263; }
 .pixel-key > p:last-child > span:nth-child(2) { position: absolute; left: 40%; transform: translateX(-50%); }
-.parcel-caution { border-top: 1px solid #becbb3; padding-top: 10px; margin: 15px 0 0; font-size: 10px; line-height: 1.4; color: #8b967f; }
+.parcel-caution { border-top: 1px solid #becbb3; padding-top: 10px; margin: 15px 0 0; font-size: 11px; line-height: 1.4; color: #78896c; }
 
 @media (min-width: 1500px) {
   .field-index { grid-template-columns: 354px minmax(0, 1fr); }

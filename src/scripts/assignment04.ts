@@ -109,11 +109,14 @@ if (root) {
     const cityLayers = ["a4-city-fill", "a4-city-edge"];
     const studyLayers = ["a4-screening", "a4-screening-edge", "a4-parcels", "a4-parcel-edge", "a4-selected-halo", "a4-selected-edge"];
     const compact = () => window.innerWidth <= 760;
+    let imageRequest = 0;
     const duration = (value: number) => reducedMotion ? 0 : value;
     const fit = (bounds: number[], selected = false) => {
-      const small = compact() || map.getContainer().clientWidth < 700;
+      const mapWidth = map.getContainer().clientWidth;
+      const small = compact() || mapWidth < 700;
+      const evidencePadding = Math.min(mapWidth - 120, element("parcel-sheet").offsetWidth + (window.innerWidth <= 1100 ? 60 : 72) + 20);
       const padding = selected
-        ? small ? { top: 70, bottom: 50, left: 28, right: 28 } : { top: 95, bottom: 80, left: 90, right: 420 }
+        ? compact() ? { top: 70, bottom: 50, left: 28, right: 28 } : { top: 95, bottom: 80, left: small ? 26 : 90, right: evidencePadding }
         : small ? { top: 90, bottom: 110, left: 26, right: 45 } : { top: 100, bottom: 85, left: 85, right: 100 };
       map.fitBounds(bounds as LngLatBoundsLike, { padding, duration: duration(1050), maxZoom: selected ? 17.3 : state.scale === "city" ? 12.3 : 15.2 });
     };
@@ -134,6 +137,8 @@ if (root) {
       const split = Number(element<HTMLInputElement>("image-comparison").value);
       element("image-front").style.clipPath = `inset(0 ${100 - split}% 0 0)`;
       element("image-seam").style.left = `${split}%`;
+      element("image-label-left").hidden = split < 8;
+      element("image-label-right").hidden = split > 92;
     };
 
     const updateImages = () => {
@@ -141,11 +146,15 @@ if (root) {
       const images = manifest.images[state.selected];
       if (!images) return;
       const archive = state.evidence === "archive";
+      const request = ++imageRequest;
       const frontPath = archive ? images["1996"] : images["2022_rgb"];
       const backPath = archive ? images["2018"] : images["2022_ndvi"];
       const address = titleCase(byBBL.get(state.selected)!.properties.address);
       const front = element<HTMLImageElement>("image-front-img");
       const back = element<HTMLImageElement>("image-back");
+      front.style.opacity = "0";
+      back.style.opacity = "0";
+      element("image-loading").hidden = false;
       front.src = asset(frontPath);
       back.src = asset(backPath);
       front.alt = `${address} - ${archive ? "1996 aerial photography" : "2022 true-colour aerial imagery"}`;
@@ -159,6 +168,14 @@ if (root) {
       element<HTMLInputElement>("image-comparison").setAttribute("aria-label", archive ? "Compare 1996 and 2018 aerial imagery" : "Compare 2022 true-colour imagery and pixel NDVI");
       document.querySelectorAll<HTMLButtonElement>("[data-evidence]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.evidence === state.evidence)));
       imageComparison();
+      Promise.all([front.decode(), back.decode()]).then(() => {
+        if (request !== imageRequest) return;
+        front.style.opacity = "1";
+        back.style.opacity = "1";
+        element("image-loading").hidden = true;
+      }).catch(() => {
+        if (request === imageRequest) element("image-loading").textContent = "The dated image could not load. Choose the parcel again to retry.";
+      });
     };
 
     const closeParcel = () => {
@@ -208,7 +225,7 @@ if (root) {
       fit([centerX - 0.0016, centerY - 0.0012, centerX + 0.0016, centerY + 0.0012], true);
     };
 
-    const renderList = () => {
+    const renderList = (fitResults = false) => {
       const filtered = features.filter(matches).sort((a, b) => b.properties.veg_pct - a.properties.veg_pct);
       const list = element("parcel-list");
       list.replaceChildren();
@@ -239,7 +256,14 @@ if (root) {
         const filter = filterExpression();
         map.setFilter("a4-parcels", filter);
         map.setFilter("a4-parcel-edge", filter);
+        if (state.scale === "study" && fitResults) {
+          const bounds = filtered.map(boundsOf);
+          fit(bounds.length
+            ? [Math.min(...bounds.map((b) => b[0])), Math.min(...bounds.map((b) => b[1])), Math.max(...bounds.map((b) => b[2])), Math.max(...bounds.map((b) => b[3]))]
+            : manifest.bounds.screening);
+        }
       }
+      if (state.scale === "study") element("caption-detail").textContent = `${filtered.length} of 14 sampled lots - ${state.reading === "vegetation" ? "2022 spectral vegetation response" : "1996 and 2018 image readings"}`;
     };
 
     const updateReading = () => {
@@ -250,11 +274,12 @@ if (root) {
         ? ["step", ["get", "veg_pct"], "#eee6cc", 20, "#cbd8b7", 50, "#98b487", 80, "#4c7257"]
         : ["get", "history_color"]);
       map.setPaintProperty("a4-parcels", "fill-opacity", state.reading === "vegetation" ? 0.91 : 0.65);
-      if (state.scale === "study") element("caption-detail").textContent = state.reading === "vegetation" ? "14 sampled lots - 2022 spectral vegetation response" : "14 sampled lots - 1996 and 2018 image readings";
+      if (state.scale === "study") element("caption-detail").textContent = `${features.filter(matches).length} of 14 sampled lots - ${state.reading === "vegetation" ? "2022 spectral vegetation response" : "1996 and 2018 image readings"}`;
     };
 
     const setScale = (scale: "city" | "study") => {
       state.scale = scale;
+      root.classList.toggle("is-study", scale === "study");
       state.borough = "all";
       closeParcel();
       element("city-reading").hidden = scale !== "city";
@@ -347,14 +372,14 @@ if (root) {
 
     document.querySelectorAll<HTMLButtonElement>("[data-scale]").forEach((button) => button.addEventListener("click", () => setScale(button.dataset.scale as "city" | "study")));
     element("enter-study").addEventListener("click", () => setScale("study"));
-    element<HTMLSelectElement>("history-filter").addEventListener("change", (event) => { state.history = (event.target as HTMLSelectElement).value; renderList(); });
-    element<HTMLSelectElement>("vegetation-filter").addEventListener("change", (event) => { state.vegetation = (event.target as HTMLSelectElement).value; renderList(); });
+    element<HTMLSelectElement>("history-filter").addEventListener("change", (event) => { state.history = (event.target as HTMLSelectElement).value; renderList(true); });
+    element<HTMLSelectElement>("vegetation-filter").addEventListener("change", (event) => { state.vegetation = (event.target as HTMLSelectElement).value; renderList(true); });
     element("clear-filters").addEventListener("click", () => {
       state.history = "all";
       state.vegetation = "all";
       element<HTMLSelectElement>("history-filter").value = "all";
       element<HTMLSelectElement>("vegetation-filter").value = "all";
-      renderList();
+      renderList(true);
     });
     document.querySelectorAll<HTMLInputElement>('input[name="reading"]').forEach((radio) => radio.addEventListener("change", () => { state.reading = radio.value as "vegetation" | "history"; updateReading(); }));
     document.querySelectorAll<HTMLButtonElement>("[data-evidence]").forEach((button) => button.addEventListener("click", () => { state.evidence = button.dataset.evidence as "archive" | "2022"; updateImages(); }));
