@@ -8,7 +8,7 @@
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Lora", ui-serif, Georgia, serif;
+  --font-serif: "Times New Roman", Times, serif;
 }
 
 :root {
@@ -23,7 +23,7 @@
   }
 
   html.dark {
-    color-scheme: dark;
+    color-scheme: light;
   }
 
   html,
@@ -34,15 +34,24 @@
   body {
     @apply font-sans antialiased;
     @apply flex flex-col;
-    @apply bg-stone-100 dark:bg-stone-900;
+    background: #eef1e9;
     @apply text-black/50 dark:text-white/75;
+  }
+
+  html.dark body {
+    background: #eef1e9;
+    color: #3f493b;
   }
 
   header {
     @apply fixed top-0 left-0 right-0 z-50 flex items-center;
     height: var(--header-h);
-    @apply bg-stone-100/75 dark:bg-stone-900/25;
+    background: color-mix(in srgb, #eef1e9 82%, transparent);
     @apply backdrop-blur-sm saturate-200;
+  }
+
+  html.dark header {
+    color: #3f493b;
   }
 
   main {
@@ -60,7 +69,7 @@
   }
 
   a {
-    color: rgb(236, 55, 19);
+    color: #556b50;
   }
 
   /* Page headings (not the headings inside map popups, legends or chapter cards). */
@@ -88,6 +97,55 @@
 
   main :is(h4, h5):not(ml-map *, ml-scrollytelling *) {
     font-weight: 700;
+  }
+}
+
+@layer components {
+  .map-note {
+    border: 1px solid rgb(72 86 65 / 22%);
+    background: rgb(247 246 238 / 92%);
+    padding: 1rem 1.1rem 0.95rem;
+    color: #394236;
+    box-shadow: 0 10px 28px rgb(48 61 45 / 10%);
+    backdrop-filter: blur(8px);
+  }
+
+  .map-note h1 {
+    margin: 0.15rem 0 0.45rem;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 1.65rem;
+    font-weight: 400;
+    line-height: 1.05;
+  }
+
+  .map-note p {
+    margin: 0;
+    font-family: "Times New Roman", Times, serif;
+    line-height: 1.35;
+  }
+
+  .map-note .map-note-kicker,
+  .map-note .map-note-hint,
+  .map-note .map-note-source {
+    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.69rem;
+    letter-spacing: 0.04em;
+  }
+
+  .map-note .map-note-kicker {
+    color: #6c7966;
+  }
+
+  .map-note .map-note-hint {
+    margin-top: 0.7rem;
+    color: #788171;
+  }
+
+  .map-note .map-note-source {
+    margin-top: 0.45rem;
+    color: #879080;
+    font-size: 0.62rem;
+    line-height: 1.3;
   }
 }
 

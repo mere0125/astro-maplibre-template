@@ -5,16 +5,23 @@ import { FullPageMap, loadMapConfig } from "@maplibre-yaml/astro";
 {/* The map is src/maps/full-page.yaml. It is checked when the site builds. */}
 export const map = await loadMapConfig("./src/maps/full-page.yaml");
 
-<PageLayout title="Full page map" description={SITE.DESCRIPTION} bleed>
+<PageLayout title="Temporary Forest evidence sites" description={SITE.DESCRIPTION} bleed>
   {/* FullPageMap covers the whole window; `style` starts it below the site header. */}
   <FullPageMap
     config={map}
     style="top: var(--header-h); height: calc(100vh - var(--header-h));"
   >
-    <div slot="top-left" class="hidden sm:block rounded bg-white/90 px-3 py-2 text-sm text-stone-700 shadow max-w-64">
-      <strong>Central Park</strong><br />
-      Squirrel sightings and Manhattan's bike lanes. Use the layer panel to
-      switch layers on and off.
+    <div slot="top-left" class="map-note hidden sm:block max-w-80">
+      <p class="map-note-kicker">East New York - evidence sites</p>
+      <h1>The Temporary Forest</h1>
+      <p>
+        Fourteen current vacant lots, read through vacancy history and the
+        share of 2022 aerial-image pixels with an NDVI response above 0.20.
+      </p>
+      <p class="map-note-hint">Click a circle to read one site's evidence.</p>
+      <p class="map-note-source">
+        Sources - MapPLUTO 26v2, NYC OTI orthophotos 1996 and 2018, USDA NAIP 2022
+      </p>
     </div>
   </FullPageMap>
 </PageLayout>

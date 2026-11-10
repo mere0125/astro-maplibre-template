@@ -1,79 +1,118 @@
 # yaml-language-server: $schema=https://docs.maplibre-yaml.org/schema/latest/map.schema.json
-#
-# The map on src/pages/full_page_map.mdx: it fills the window under the site
-# header, with zoom and reset buttons, a legend and a layer panel.
 type: map
-id: full-page
-config:
-  mapStyle: "https://tiles.openfreemap.org/styles/positron"
-  center: [-73.9654, 40.7829]
-  zoom: 12.5
+id: temporary-forest-evidence
 
-# Where the legend sits: top-left (default), top-right, bottom-left, bottom-right.
+config:
+  mapStyle: "/style.json"
+  center: [-73.8859, 40.6708]
+  zoom: 14
+
 legend:
   position: bottom-left
+  title: Reading the map
+  items:
+    - { label: "Open in 1996, 2018, and 2026", color: "#78996d", shape: square }
+    - { label: "Cleared between 1996 and 2018", color: "#c9a57d", shape: square }
+    - { label: "Vegetation under 20 percent", color: "#ddd7ca", shape: circle }
+    - { label: "Vegetation 20 to under 50 percent", color: "#c4d3b8", shape: circle }
+    - { label: "Vegetation 50 to under 80 percent", color: "#91ad82", shape: circle }
+    - { label: "Vegetation 80 percent or more", color: "#496b47", shape: circle }
 
 layers:
-  # Vector tiles from OpenFreeMap (free, no key): the same tiles the basemap
-  # draws, here only their building shapes, in a colour of your own.
-  # Starts switched off; tick it in the layer panel.
-  - id: buildings
+  # Categorical representation. The hex value was calculated from each
+  # parcel's duration_group before export, then read with MapLibre get syntax.
+  - id: vacancy-history
     type: fill
-    label: Buildings
-    visible: false
-    legend: false
-    source:
-      type: vector
-      url: "https://tiles.openfreemap.org/planet"
-    source-layer: building
-    minzoom: 13
-    paint:
-      fill-color: "#b2182b"
-      fill-opacity: 0.35
-
-  - id: bike-lanes
-    type: line
-    label: Bike lanes
+    label: Vacancy history
     source:
       type: geojson
-      url: "/data/manhattan-bike-lanes.geojson"
+      url: "/data/temporary_forest_parcels.geojson"
     paint:
-      line-color: "#2166ac"
-      line-width: 2
-    legend: { label: Bike lanes, color: "#2166ac", shape: line }
-    interactive:
-      hover:
-        cursor: pointer
-        popup:
-          - strong:
-              - property: street
-
-  - id: squirrels
-    type: circle
-    label: Squirrels by fur colour
-    source:
-      type: geojson
-      url: "/data/squirrel20241021.geojson"
-    classify:
-      field: primary_fur_color
-      categories:
-        Gray: "#7a7a7a"
-        Cinnamon: "#c0642f"
-        Black: "#1f1f1f"
-      other: "#d4c9a8"
-    paint:
-      circle-radius: 4
-      circle-stroke-width: 1
-      circle-stroke-color: "#ffffff"
+      fill-color: ["get", "duration_color"]
+      fill-opacity: 0.5
+      fill-outline-color: "#586252"
     interactive:
       hover:
         cursor: pointer
       click:
         popup:
           - h3:
-              - str: "Squirrel "
-              - property: unique_squirrel_id
+              - property: address
+                else: Address not recorded
           - p:
-              - str: "Fur: "
-              - property: primary_fur_color
-                else: "not recorded"
+              - str: "Vacancy history: "
+              - property: duration_group
+          - p:
+              - str: "Evidence: "
+              - property: evidence_years
+          - p:
+              - str: "2022 vegetation response: "
+              - property: veg_pct
+              - str: "% of parcel pixels"
+
+  # Numeric representation. Circle size is stepped by the parcel's 2022
+  # vegetation response, following the tutorial's step-expression method.
+  - id: vegetation-size
+    type: circle
+    label: Vegetation cover - size view
+    source:
+      type: geojson
+      url: "/data/temporary_forest_sites.geojson"
+    paint:
+      circle-color: "#526b4c"
+      circle-opacity: 0.84
+      circle-stroke-color: "#fbf7ec"
+      circle-stroke-width: 1.5
+      circle-radius: ["step", ["get", "veg_pct"], 3, 20, 5, 50, 8, 80, 12]
+    interactive:
+      hover:
+        cursor: pointer
+      click:
+        popup:
+          - h3:
+              - property: address
+                else: Address not recorded
+          - p:
+              - str: "Vegetation response: "
+              - property: veg_pct
+              - str: "%"
+          - p:
+              - str: "Class: "
+              - property: vegetation_class
+          - p:
+              - str: "Mean NDVI: "
+              - property: ndvi_mean
+          - p:
+              - str: "Vacancy history: "
+              - property: duration_group
+
+  # A second numeric view demonstrates stepped colour. It starts off so the
+  # two circle representations do not obscure one another.
+  - id: vegetation-colour
+    type: circle
+    label: Vegetation cover - colour view
+    visible: false
+    source:
+      type: geojson
+      url: "/data/temporary_forest_sites.geojson"
+    paint:
+      circle-radius: 8
+      circle-color: ["step", ["get", "veg_pct"], "#ddd7ca", 20, "#c4d3b8", 50, "#91ad82", 80, "#496b47"]
+      circle-opacity: 0.9
+      circle-stroke-color: "#fbf7ec"
+      circle-stroke-width: 1.5
+    interactive:
+      hover:
+        cursor: pointer
+      click:
+        popup:
+          - h3:
+              - property: address
+                else: Address not recorded
+          - p:
+              - str: "Vegetation response: "
+              - property: veg_pct
+              - str: "%"
+          - p:
+              - str: "Vacancy history: "
+              - property: duration_group

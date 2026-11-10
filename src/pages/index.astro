@@ -7,30 +7,19 @@ import { url } from "@lib/utils";
 
 <PageLayout title={HOME.TITLE} description={HOME.DESCRIPTION}>
   <Container>
-    <h4 class="animate font-semibold text-black dark:text-white">
-      Boilerplate Astro website for presenting spatial narratives <span
-        class="text-xl">🗺️</span
-      >
-    </h4>
+    <p class="animate text-sm tracking-wide text-stone-500">An evolving map study by Mere Cui</p>
     <div class="space-y-8">
-      <h2 class="font-semibold text-black dark:text-white">About</h2>
+      <h1 class="font-serif text-black dark:text-white">The Temporary Forest</h1>
       <p>
-        This is a starting point for a website that tells a story with maps. It is built with <a href="https://astro.build/">Astro</a>, <a href="https://tailwindcss.com/">Tailwind CSS</a> and <a href="https://docs.maplibre-yaml.org/">maplibre-yaml</a>, which turns a YAML file into a <a href="https://maplibre.org/">MapLibre</a> map.
-        Every map on this site is a file in <b>src/maps/</b> or <b>src/stories/</b>: edit the YAML, not code.
+        Vacant land is often recorded as a single administrative category. This
+        project asks what becomes visible when that category is read through
+        time, vegetation, and parcel-scale evidence.
       </p>
-      <ul class="list-disc pl-6 space-y-4">
-        <li>
-          <a href={url("inline_maps")}>Inline maps</a> (<b>src/pages/inline_maps.mdx</b>): maps placed in a page between text and images, with popups, a legend, layer toggles, and a map beside text in two columns.
-        </li>
-        <li>
-          <a href={url("full_page_map")}>Full page map</a> (<b>src/pages/full_page_map.mdx</b>): one map that fills the window, with zoom buttons, a legend and a layer panel.
-        </li>
-        <li>
-          <a href={url("scrollytelling")}>Scrollytelling</a> (<b>src/pages/scrollytelling.mdx</b> and <b>src/stories/nyc.yaml</b>): a story map whose chapters move the camera and show and hide layers as you scroll.
-        </li>
-      </ul>
-      <p>
-        To find the <code>center</code> and <code>zoom</code> for a map, move around <a href="https://labs.mapbox.com/location-helper/">this location helper</a> and copy the numbers.
+      <p><a class="text-lg" href={url("full_page_map")}>Enter the evidence map</a></p>
+      <p class="max-w-2xl text-sm text-stone-500">
+        This tutorial view uses a purposive sample of fourteen East New York
+        parcels. It is not a census of vacant land and does not treat vegetation
+        response as proof of habitat quality.
       </p>
     </div>
   </Container>

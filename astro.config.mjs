@@ -10,7 +10,7 @@ export default defineConfig({
   // Put your user name in `site` and your repository name in `base`. Every
   // link, map, data file and image on the site picks up `base` from here, so
   // this is the only place the repository name is written.
-  site: "https://design-practices.github.io",
+  site: "https://mere0125.github.io",
   base: "/astro-maplibre-template",
 
   // mdx: pages written in MDX. sitemap: sitemap-index.xml for search engines.
