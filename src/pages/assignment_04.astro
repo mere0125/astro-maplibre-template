@@ -31,7 +31,7 @@ import "../styles/assignment04.css";
           <p>The pale green shapes are administrative records. Their colour does not say whether the land is bare, overgrown, accessible, or forested.</p>
           <div id="borough-list" class="borough-list" aria-label="Vacant tax lots by borough"></div>
           <p class="marginal-note">A place to begin, rather than an ecological inventory.</p>
-          <button type="button" class="text-action" id="enter-study">Look closely in East New York <span aria-hidden="true">→</span></button>
+          <button type="button" class="text-action leaf-action" id="enter-study">Look closely in East New York</button>
         </section>
 
         <section id="study-reading" class="study-reading" hidden>
@@ -75,7 +75,7 @@ import "../styles/assignment04.css";
           <p>The same vacant-land category contains very different surfaces. These fourteen image fragments keep the shape of each actual parcel.</p>
           <p>Start with two lots whose earlier readings match, then unfold the full sample. Choose a fragment to return to its place on the map.</p>
           <p class="marginal-note">The fragments record the 2022 surface. Field observations will investigate vegetation, maintenance and access.</p>
-          <a class="text-action register-download" href={url("data/assignment04/field_register.csv")} download>Take the fourteen-lot register <span aria-hidden="true">↓</span></a>
+          <a class="text-action register-download leaf-action" href={url("data/assignment04/field_register.csv")} download>Take the fourteen-lot register</a>
           <p class="register-note">CSV - original measurement precision, source years and parcel identifiers.</p>
         </section>
 
@@ -101,7 +101,7 @@ import "../styles/assignment04.css";
             <p class="credit-line">Mere - November 2026</p>
           </div>
         </details>
-        <a class="tutorial-back" href={url("full_page_map")}>tutorial map <span aria-hidden="true">↗</span></a>
+        <a class="tutorial-back leaf-action" href={url("full_page_map")}>tutorial map</a>
       </aside>
 
       <main class="field-map-shell" aria-label="Interactive map and selected parcel evidence">
@@ -142,7 +142,7 @@ import "../styles/assignment04.css";
           <p class="parcel-heading-note">one close reading</p>
           <h2 id="parcel-address"></h2>
           <p id="parcel-identification" class="parcel-identification"></p>
-          <button type="button" class="back-to-folio" id="back-to-surfaces" hidden>return to the surface folio ↗</button>
+          <button type="button" class="back-to-folio leaf-action" id="back-to-surfaces" hidden>return to the surface folio</button>
           <div class="record-strip" aria-label="Three dated observations">
             <div><span>1996 - image</span><strong id="status-1996"></strong></div>
             <div><span>2018 - image</span><strong id="status-2018"></strong></div>
@@ -195,7 +195,7 @@ import "../styles/assignment04.css";
             <p id="surface-group-summary"></p>
             <p>A vacant-land inventory gives this atlas places to investigate. Historical images and vegetation measurements help choose contrasting cases. Field observation is still needed to establish what grows there, how the ground is maintained, and who can use it.</p>
             <p class="folio-method">The percentage is the share of valid assigned pixels with NDVI greater than 0.20. It measures spectral vegetation response, not tree canopy or habitat quality. Parcel fragments are display resamplings; the measurements use the original raster. Sources: NYC DCP and tax-lot geometry, NYC OTI archival imagery, USDA NAIP 2022. Full methods and credits are in the field notes.</p>
-            <div class="folio-actions"><button type="button" id="surface-return-map">Return to the map <span aria-hidden="true">→</span></button><a href={url("data/assignment04/field_register.csv")} download>Download the field register ↓</a></div>
+            <div class="folio-actions"><button type="button" class="leaf-action" id="surface-return-map">Return to the map</button><a class="leaf-action" href={url("data/assignment04/field_register.csv")} download>Download the field register</a></div>
           </section>
           <p class="folio-signature">The Temporary Forest - Mere - November 2026</p>
         </article>

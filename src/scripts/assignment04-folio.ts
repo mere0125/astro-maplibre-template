@@ -46,7 +46,7 @@ export const createSurfaceFolio = ({ features, images, specimens, asset, locate 
     image.alt = `2022 NAIP image of ${titleCase(p.address)} with the current parcel outlined`;
     image.loading = "lazy";
     image.width = image.height = 512;
-    button.append(image, node("span", "pair-map-link", "locate this parcel ↗"));
+    button.append(image, node("span", "pair-map-link leaf-action", "locate this parcel"));
     button.addEventListener("click", () => locate(bbl));
     const caption = node("figcaption", "paired-caption");
     caption.append(node("h4", "", titleCase(p.address)));
