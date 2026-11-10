@@ -9,6 +9,7 @@ import {
 } from "maplibre-gl";
 import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
 import type { Feature, FeatureCollection, MultiPolygon, Polygon, Position } from "geojson";
+import { createSurfaceFolio } from "./assignment04-folio";
 
 type Parcel = {
   bbl: string;
@@ -55,11 +56,12 @@ if (root) {
   };
 
   const start = async () => {
-    const [manifest, parcels, screening, basemap] = await Promise.all([
+    const [manifest, parcels, screening, basemap, specimens] = await Promise.all([
       json<Manifest>("data/assignment04/manifest.json"),
       json<FeatureCollection<Polygon | MultiPolygon, Parcel>>("data/assignment04/parcels.geojson"),
       json<FeatureCollection>("data/assignment04/screening.geojson"),
       json<StyleSpecification>("style.json"),
+      json<{ common_extent_feet: number; specimens: Record<string, { file: string }> }>("data/assignment04/specimens.json"),
     ]);
 
     // The analytical layers keep their own precise colours. The basemap is
@@ -110,6 +112,7 @@ if (root) {
     const studyLayers = ["a4-screening", "a4-screening-edge", "a4-parcels", "a4-parcel-edge", "a4-selected-halo", "a4-selected-edge"];
     const compact = () => window.innerWidth <= 760;
     let imageRequest = 0;
+    let folioOpen = false;
     const duration = (value: number) => reducedMotion ? 0 : value;
     const fit = (bounds: number[], selected = false) => {
       const mapWidth = map.getContainer().clientWidth;
@@ -194,12 +197,13 @@ if (root) {
       return [Math.min(...coordinates.map((coordinate) => coordinate[0])), Math.min(...coordinates.map((coordinate) => coordinate[1])), Math.max(...coordinates.map((coordinate) => coordinate[0])), Math.max(...coordinates.map((coordinate) => coordinate[1]))];
     };
 
-    const selectParcel = (bbl: string) => {
+    const selectParcel = (bbl: string, evidence: "archive" | "2022" = "archive") => {
       const feature = byBBL.get(bbl);
       if (!feature || !matches(feature) || state.scale !== "study") return;
       const p = feature.properties;
       state.selected = bbl;
-      state.evidence = "archive";
+      state.evidence = evidence;
+      element("back-to-surfaces").hidden = true;
       element("parcel-address").textContent = titleCase(p.address);
       element("parcel-identification").textContent = `BBL ${p.bbl} - ${Math.round(p.lotarea)} square feet`;
       element("status-1996").textContent = p.condition_1996 === "open ground" ? "open ground" : "building visible";
@@ -278,6 +282,12 @@ if (root) {
     };
 
     const setScale = (scale: "city" | "study") => {
+      folioOpen = false;
+      root.classList.remove("is-folio");
+      element("map-plane").inert = false;
+      element("surface-folio").hidden = true;
+      element("surface-reading").hidden = true;
+      element("open-surfaces").setAttribute("aria-pressed", "false");
       state.scale = scale;
       root.classList.toggle("is-study", scale === "study");
       state.borough = "all";
@@ -299,6 +309,37 @@ if (root) {
       }
       updateReading();
     };
+
+    const showSurfaces = () => {
+      setScale("study");
+      folioOpen = true;
+      root.classList.add("is-folio");
+      element("map-plane").inert = true;
+      element("study-reading").hidden = true;
+      element("surface-reading").hidden = false;
+      element("surface-folio").hidden = false;
+      element("field-notes").scrollTop = 0;
+      document.querySelectorAll<HTMLButtonElement>("[data-scale]").forEach((button) => button.setAttribute("aria-pressed", "false"));
+      element("open-surfaces").setAttribute("aria-pressed", "true");
+      element("surface-title").focus({ preventScroll: true });
+    };
+
+    createSurfaceFolio({ features, images: manifest.images, specimens, asset, locate: (bbl) => {
+      const locate = () => {
+        state.history = "all";
+        state.vegetation = "all";
+        element<HTMLSelectElement>("history-filter").value = "all";
+        element<HTMLSelectElement>("vegetation-filter").value = "all";
+        setScale("study");
+        renderList();
+        selectParcel(bbl, "2022");
+        element("back-to-surfaces").hidden = false;
+        element("close-parcel").focus({ preventScroll: true });
+        if (compact()) element("map-plane").parentElement?.scrollIntoView({ block: "start" });
+      };
+      if (state.ready) locate();
+      else map.once("load", locate);
+    } });
 
     const boroughList = element("borough-list");
     const boroughCaption = document.createElement("p");
@@ -349,7 +390,9 @@ if (root) {
       map.addLayer({ id: "a4-selected-edge", type: "line", source: "a4-parcel-source", filter: ["==", ["get", "bbl"], ""], paint: { "line-color": "#344d38", "line-width": 3 }, layout: { visibility: "none" } });
       state.ready = true;
       renderList();
-      setScale("city");
+      const reopenFolio = folioOpen;
+      setScale(state.scale);
+      if (reopenFolio) showSurfaces();
       map.once("idle", () => { element("map-loading").hidden = true; });
     });
 
@@ -372,6 +415,12 @@ if (root) {
 
     document.querySelectorAll<HTMLButtonElement>("[data-scale]").forEach((button) => button.addEventListener("click", () => setScale(button.dataset.scale as "city" | "study")));
     element("enter-study").addEventListener("click", () => setScale("study"));
+    element("open-surfaces").addEventListener("click", showSurfaces);
+    element("back-to-surfaces").addEventListener("click", showSurfaces);
+    element("surface-return-map").addEventListener("click", () => {
+      setScale("study");
+      element("open-surfaces").focus({ preventScroll: true });
+    });
     element<HTMLSelectElement>("history-filter").addEventListener("change", (event) => { state.history = (event.target as HTMLSelectElement).value; renderList(true); });
     element<HTMLSelectElement>("vegetation-filter").addEventListener("change", (event) => { state.vegetation = (event.target as HTMLSelectElement).value; renderList(true); });
     element("clear-filters").addEventListener("click", () => {
@@ -393,8 +442,15 @@ if (root) {
     key.hidden = compact();
     element("toggle-legend").setAttribute("aria-expanded", String(!key.hidden));
     element("toggle-legend").addEventListener("click", () => { key.hidden = !key.hidden; element("toggle-legend").setAttribute("aria-expanded", String(!key.hidden)); });
-    document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeParcel(); });
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") return;
+      if (folioOpen) {
+        setScale("study");
+        element("open-surfaces").focus({ preventScroll: true });
+      } else closeParcel();
+    });
     renderList();
+    if (window.location.hash === "#surfaces") showSurfaces();
   };
 
   start().catch((error: unknown) => {

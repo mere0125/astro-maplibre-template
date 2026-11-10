@@ -36,6 +36,16 @@ Each image must retain its year, source, spatial extent, and parcel outline. The
 
 The interface uses restrained sage and paper colours, Times typography, quiet botanical details, actual parcel shapes, and deliberate changes in scale. The visual hierarchy is intended to support close reading rather than turn every dataset into an equally prominent layer.
 
+## The surface folio
+
+The third navigation choice, “the surfaces”, opens an evidence folio alongside the two map views. It begins with 492 Glenmore Avenue and 943 Dumont Avenue. Both appear open in the 1996 and 2018 observations and are classified vacant in the 2026 record. Their reported lot areas are 5000 and 5400 square feet, yet their measured 2022 vegetation responses are 92.3 and 0.3 percent. The paired 2022 RGB images use the same 450-foot ground context. These deliberately chosen extremes illustrate variation within the same category and two-date history; they are not a matched or controlled study.
+
+The folio then shows the actual shapes of all fourteen parcels filled with their real 2022 image pixels. Every cutout uses the same 300-foot square extent, with grid north up in EPSG:2263. The parcels retain their relative sizes and current boundaries. The RGB images are resampled bilinearly for display and masked to the parcel geometry. No vegetation is invented, and the original analytical measurements are unchanged. The 50-foot reference applies to these cutouts, not the 450-foot context images above them.
+
+Select a specimen to locate it on the map and open its evidence card. The downloadable `field_register.csv` preserves the fourteen records and their numerical measurements at the precision held in the existing dataset. It is a register of image and administrative evidence, not a record of completed field visits.
+
+This arrangement makes a question in the final atlas visible: what can an administrative label tell us about a living surface, and what evidence does it leave out? It helps identify contrasting cases for closer observation. The similar group medians, 63.1 and 63.6 percent, remain part of the interpretation, so the striking pair is not presented as proof of a general relationship between vacancy history and vegetation.
+
 ## Measurements
 
 NDVI is calculated as the near-infrared value minus the red value, divided by their sum. The parcel percentage is the share of valid assigned pixels whose NDVI is greater than 0.20. Red and near infrared are bands 1 and 4 of the retained four-band 2022 NAIP image.
@@ -60,6 +70,8 @@ With a Node version supported by the repository's `package.json`, install depend
 
 GIS preparation is scripted and traceable to the retained source layers. Astro creates the web page and MapLibre renders the interactive map. This is not a direct QGIS web export. See `CODE_PROVENANCE.txt` for the actual template, tutorial, library, data, and OpenAI Codex contributions.
 
+`scripts/prepare_assignment04_specimens.py` prepares the common-scale cutouts and field register from the retained parcel data and original 2022 raster. Its outputs are `public/images/assignment04/specimens/`, `public/data/assignment04/specimens.json`, and `public/data/assignment04/field_register.csv`.
+
 ## 演讲时怎么理解
 
 这次作业是期末项目的交互式索引。先用全纽约的空置地块说明背景，再进入 East New York 的筛选范围，最后点开一个具体地块，看它在不同年份的证据。
@@ -67,3 +79,5 @@ GIS preparation is scripted and traceable to the retained source layers. Astro c
 1996 和 2018 是航拍影像的观察年份。2022 是 NDVI 的影像年份。2026 是 MapPLUTO 的行政分类年份，不能说成 2026 的航拍观察。图中每个绿色百分比表示该地块中 NDVI 大于 0.20 的有效像素比例，不等于树冠覆盖率，也不等于森林面积。
 
 最值得讲的结果是：长期开放组与后来清空组的植被响应中位数非常接近，因此“空置越久就越绿”并不是这组样本能支持的结论。交互的作用是让观众自行查看这些差异及其证据。
+
+新增的 the surfaces 像一页地块图鉴。先看同样在两个历史年份呈开放地面的两个地块，如何呈现完全不同的 2022 植被响应；再看十四个真实地块按统一尺度排在一起。图鉴中的影像和形状都来自现有 GIS 数据，点击后可以回到地图核查。它让“空置”这个标签下的差异更容易看见，也为期末项目选择后续观察对象提供依据。

@@ -21,6 +21,7 @@ import "../styles/assignment04.css";
           <nav class="field-scales" aria-label="Choose a geographic scale">
             <button type="button" data-scale="city" aria-pressed="true">the city</button>
             <button type="button" data-scale="study" aria-pressed="false">East New York</button>
+            <button type="button" id="open-surfaces" aria-pressed="false">the surfaces</button>
           </nav>
         </div>
 
@@ -69,6 +70,15 @@ import "../styles/assignment04.css";
           <p class="marginal-note">The sample is deliberately selected. These fourteen lots cannot represent the city as a whole.</p>
         </section>
 
+        <section id="surface-reading" class="surface-reading" hidden>
+          <h2>A closer kind of record</h2>
+          <p>The same vacant-land category contains very different surfaces. These fourteen image fragments keep the shape of each actual parcel.</p>
+          <p>Start with two lots whose earlier readings match, then unfold the full sample. Choose a fragment to return to its place on the map.</p>
+          <p class="marginal-note">The fragments record the 2022 surface. Field observations will investigate vegetation, maintenance and access.</p>
+          <a class="text-action register-download" href={url("data/assignment04/field_register.csv")} download>Take the fourteen-lot register <span aria-hidden="true">↓</span></a>
+          <p class="register-note">CSV - original measurement precision, source years and parcel identifiers.</p>
+        </section>
+
         <details class="reading-method">
           <summary>the evidence and its limits</summary>
           <div>
@@ -95,6 +105,7 @@ import "../styles/assignment04.css";
       </aside>
 
       <main class="field-map-shell" aria-label="Interactive map and selected parcel evidence">
+        <div class="map-plane" id="map-plane">
         <div id="assignment-map" class="field-map" aria-label="Map of New York City vacant tax lots"></div>
         <div class="map-caption" id="map-caption"><span class="caption-place" id="caption-place">New York City</span><span id="caption-detail">vacant tax-lot records - 26v2</span></div>
         <div class="map-loading" id="map-loading" role="status">Opening the field index…</div>
@@ -131,6 +142,7 @@ import "../styles/assignment04.css";
           <p class="parcel-heading-note">one close reading</p>
           <h2 id="parcel-address"></h2>
           <p id="parcel-identification" class="parcel-identification"></p>
+          <button type="button" class="back-to-folio" id="back-to-surfaces" hidden>return to the surface folio ↗</button>
           <div class="record-strip" aria-label="Three dated observations">
             <div><span>1996 - image</span><strong id="status-1996"></strong></div>
             <div><span>2018 - image</span><strong id="status-2018"></strong></div>
@@ -155,6 +167,38 @@ import "../styles/assignment04.css";
           <p class="parcel-caution">An image reading of the surface - not a survey of trees or habitat.</p>
         </section>
         <p class="map-projection">Web Mercator - EPSG 3857</p>
+        </div>
+
+        <article class="surface-folio" id="surface-folio" aria-labelledby="surface-title" hidden>
+          <header class="folio-heading">
+            <p class="folio-place">East New York - fourteen image readings</p>
+            <h2 id="surface-title" tabindex="-1"><span>“vacant”</span><br />in fourteen forms</h2>
+            <p class="folio-opening">What a land-use record leaves for us to look at.</p>
+          </header>
+
+          <section class="paired-reading" aria-labelledby="pair-title">
+            <div class="pair-introduction"><h3 id="pair-title">Two lots with the same earlier readings</h3><p>Both appear open in the 1996 and 2018 images. Both are coded vacant in the 2026 record. Their 2022 surfaces tell very different stories.</p></div>
+            <div class="evidence-pair" id="surface-pair"></div>
+            <p class="pair-footnote">2022 NAIP true-colour images - identical 450-foot ground contexts. Pale outlines locate the current parcels. These deliberately selected examples are not a controlled comparison or evidence of continuous vacancy.</p>
+          </section>
+
+          <section class="specimen-section" aria-labelledby="specimen-title">
+            <div class="specimen-heading"><h3 id="specimen-title">The fourteen parcels</h3><p>Current parcel boundaries frame the 2022 image. A shared ground scale keeps their shapes and relative sizes comparable.</p></div>
+            <div class="specimen-instructions"><p id="specimen-scale-note">Each image occupies the same ground extent, with grid north at the top.</p></div>
+            <fieldset class="specimen-order"><legend>Arrange the collection</legend><label><input type="radio" name="surface-order" value="response" checked /> by measured response</label><label><input type="radio" name="surface-order" value="history" /> by the two histories</label></fieldset>
+            <p class="specimen-click-note">Choose a parcel to locate it on the map and read its dated evidence.</p>
+            <div class="specimen-collection" id="specimen-collection" aria-live="polite"></div>
+          </section>
+
+          <section class="folio-reflection" aria-labelledby="surface-reflection-title">
+            <h3 id="surface-reflection-title">What this leaves open</h3>
+            <p id="surface-group-summary"></p>
+            <p>A vacant-land inventory gives this atlas places to investigate. Historical images and vegetation measurements help choose contrasting cases. Field observation is still needed to establish what grows there, how the ground is maintained, and who can use it.</p>
+            <p class="folio-method">The percentage is the share of valid assigned pixels with NDVI greater than 0.20. It measures spectral vegetation response, not tree canopy or habitat quality. Parcel fragments are display resamplings; the measurements use the original raster. Sources: NYC DCP and tax-lot geometry, NYC OTI archival imagery, USDA NAIP 2022. Full methods and credits are in the field notes.</p>
+            <div class="folio-actions"><button type="button" id="surface-return-map">Return to the map <span aria-hidden="true">→</span></button><a href={url("data/assignment04/field_register.csv")} download>Download the field register ↓</a></div>
+          </section>
+          <p class="folio-signature">The Temporary Forest - Mere - November 2026</p>
+        </article>
       </main>
     </div>
     <script>

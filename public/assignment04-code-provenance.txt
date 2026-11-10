@@ -54,9 +54,9 @@ https://openfreemap.org/
 https://openmaptiles.org/
 https://www.openstreetmap.org/copyright
 
-GeoPandas, NumPy, Pillow, and TIFF-reading tools support reproducible local
-data preparation and georeferenced image excerpts. These processing
-steps do not create synthetic landscape imagery.
+GeoPandas, NumPy, Pillow, pyproj, Shapely, and TIFF-reading tools support
+reproducible local data preparation and georeferenced image excerpts.
+These processing steps do not create synthetic landscape imagery.
 
 4. Existing project work and data
 
@@ -105,6 +105,22 @@ The project was developed using retained GIS data and reproducible
 processing. The website itself is rendered by Astro and MapLibre, rather
 than being an interactive export generated directly by QGIS.
 
+The surface-folio extension was developed with the same Codex
+implementation assistance. It adds the third navigation choice, the
+paired evidence composition, common-scale specimen selection, and the
+field-register download. scripts/prepare_assignment04_specimens.py
+derives fourteen transparent parcel cutouts from the retained 2022 RGB
+raster and current parcel geometries. It produces images under
+public/images/assignment04/specimens/, metadata in
+public/data/assignment04/specimens.json, and the fourteen-record
+public/data/assignment04/field_register.csv.
+
+All cutouts use a common 300-foot square extent in EPSG:2263, with grid
+north up. Actual RGB pixels are bilinearly resampled for display and
+masked to each current parcel boundary. No vegetation is generated or
+recoloured. The original NDVI measurements remain unchanged. The paired
+context excerpts retain their separate common extent of 450 feet.
+
 6. Understanding and interpretation
 
 The presenter should be able to explain the map object, data layers,
@@ -117,6 +133,16 @@ The fourteen lots form a purposive pilot sample. The NDVI threshold of
 0.20 is an exploratory measure of spectral vegetation response. The
 interface does not establish continuous vacancy, forest status,
 biodiversity, public access, or a causal effect of vacancy duration.
+
+The folio's opening pair, 492 Glenmore Avenue and 943 Dumont Avenue, was
+deliberately chosen to illustrate contrasting 2022 responses, 92.3 and
+0.3 percent, within the same current vacant classification and the same
+open-in-1996-and-2018 group. Their reported areas are 5000 and 5400 square
+feet. This is not a matched or controlled study. The two full historical
+groups have median responses of 63.1 percent (eight parcels open at both
+dates) and 63.6 percent (six parcels built in 1996 and open in 2018). The
+field register records image and administrative evidence, not completed
+field visits.
 
 This text records the actual code origins and assistance. It does not
 claim that the instructor has approved every form of assistance used.
