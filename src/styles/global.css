@@ -2,8 +2,7 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-/* `dark:` classes apply when <html> has the "dark" class (set by the theme
-   buttons in the footer, see src/components/Head.astro). */
+/* Retain template variants; the project's appearance is fixed to light. */
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
