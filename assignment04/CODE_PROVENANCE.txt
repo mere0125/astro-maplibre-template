@@ -1,0 +1,122 @@
+The Temporary Forest
+Assignment 4 - Representation and Interactivity
+Mere Cui
+10 November 2026
+
+Project repository
+https://github.com/mere0125/astro-maplibre-template
+
+Interactive field index
+https://mere0125.github.io/astro-maplibre-template/assignment_04/
+
+1. Starting template
+
+The repository began as a fork of the course template maintained by Design
+Practices:
+https://github.com/design-practices/astro-maplibre-template
+
+The existing Astro project structure, build configuration, GitHub Pages
+deployment workflow, and general map-page setup come from this template.
+The project retains the template's license and dependency records.
+
+2. Course tutorials
+
+The following course tutorials informed the map style, GeoJSON layers,
+data-driven styling, click interactions, and publication process:
+
+Tutorial 8.1 - Interactive Mapping Part 1
+https://designpractices.org/tutorials/08-interactive-mapping-part-1/
+
+Tutorial 8.2 - Interactive Mapping Part 2
+https://designpractices.org/tutorials/09-interactive-mapping-part-2/
+
+Tutorial 8.3 - Interactive Mapping Part 3
+https://designpractices.org/tutorials/10-interactive-mapping-part-3/
+
+The Assignment 4 page is a project-specific extension of these exercises.
+It uses a citywide context, a defined East New York study window, and
+parcel-level imagery and measurements from the earlier project work.
+
+3. Libraries and technical references
+
+Astro provides the page framework and static build.
+https://astro.build/
+https://docs.astro.build/
+
+MapLibre GL JS renders the map and supports navigation, layers, filters,
+feature selection, map controls, and data-driven styling.
+https://maplibre.org/maplibre-gl-js/docs/
+
+OpenFreeMap supplies the vector basemap tiles. OpenMapTiles and
+OpenStreetMap supply the underlying basemap data. Their attribution is
+retained on the map.
+https://openfreemap.org/
+https://openmaptiles.org/
+https://www.openstreetmap.org/copyright
+
+GeoPandas, NumPy, Pillow, and TIFF-reading tools support reproducible local
+data preparation and georeferenced image excerpts. These processing
+steps do not create synthetic landscape imagery.
+
+4. Existing project work and data
+
+The fourteen analysed parcels and their 2022 vegetation measurements
+come from the retained Assignment 3 GeoPackage, raster inputs, analysis
+script, and parcel-level audit table. Their 1996 and 2018 interpretation
+fields come from the retained Assignment 2 temporal-vacancy dataset.
+
+The East New York screening context uses the original 254 matched lots
+from the earlier assignments. The citywide context uses PLUTO and
+MapPLUTO release 26v2, filtering LandUse code 11, Vacant Land.
+
+The citywide administrative count is 24,663 records. Of these, 423 have
+null geometry and 27 have empty geometry; 24,213 nonempty features can
+be drawn. The record count and mapped-feature count are kept distinct.
+
+Primary data sources are NYC Department of City Planning PLUTO and
+MapPLUTO, NYC Office of Technology and Innovation archival aerial
+imagery from 1996 and 2018, and USDA NAIP imagery from 2022. The 2026
+vacant-land status is an administrative classification, not an aerial
+image observation from that year.
+
+NYC Department of City Planning
+https://www.nyc.gov/content/planning/pages/resources/datasets/mappluto-pluto-change
+
+NYC imagery services
+https://maps.nyc.gov/
+
+USDA NAIP Plus ImageServer
+https://imagery.geoplatform.gov/iipp/rest/services/NAIP/NAIP_plus/ImageServer
+
+5. OpenAI Codex contribution
+
+OpenAI Codex was used in this collaboration to generate and revise data
+preparation code, Astro page code, HTML, CSS, TypeScript and JavaScript,
+map interactions, explanatory text, and debugging changes. It also
+assisted with auditing the source files, recomputing vegetation metrics,
+checking the interface, and preparing publication files.
+
+This contribution includes implementation, not only conceptual guidance.
+The code should not be described as written entirely by Mere without
+assistance. Mere's stated project direction and design preferences guided
+the topic, visual style, and requested revisions.
+
+The project was developed using retained GIS data and reproducible
+processing. The website itself is rendered by Astro and MapLibre, rather
+than being an interactive export generated directly by QGIS.
+
+6. Understanding and interpretation
+
+The presenter should be able to explain the map object, data layers,
+coordinate conversion, scale changes, filters, selected-feature state,
+image comparisons, and the relationship between a GeoJSON property and
+its visible colour or symbol. Source disclosure does not substitute for
+understanding or revising the code.
+
+The fourteen lots form a purposive pilot sample. The NDVI threshold of
+0.20 is an exploratory measure of spectral vegetation response. The
+interface does not establish continuous vacancy, forest status,
+biodiversity, public access, or a causal effect of vacancy duration.
+
+This text records the actual code origins and assistance. It does not
+claim that the instructor has approved every form of assistance used.

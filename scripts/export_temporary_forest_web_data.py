@@ -14,8 +14,8 @@ SOURCE = ROOT.parents[1] / "assignment03/data/processed/vacancy_vegetation_2022.
 OUTPUT = ROOT / "public/data"
 
 DURATION_COLORS = {
-    "long-open by 1996": "#78996d",
-    "cleared between 1996 and 2018": "#c9a57d",
+    "long-open by 1996": "#3e5848",
+    "cleared between 1996 and 2018": "#b27855",
 }
 
 
@@ -46,6 +46,11 @@ fields = [
 gdf = gdf[fields].copy()
 
 gdf["duration_color"] = gdf["duration_group"].map(DURATION_COLORS)
+gdf["archive_evidence"] = gdf["duration_group"].map({
+    "long-open by 1996": "open ground in 1996 and 2018",
+    "cleared between 1996 and 2018": "building visible in 1996; open ground in 2018",
+})
+gdf["current_record"] = "classified vacant in PLUTO 26v2 - 2026 administrative record"
 gdf["vegetation_class"] = gdf["veg_pct"].map(vegetation_class)
 gdf["veg_pct"] = gdf["veg_pct"].round(1)
 gdf["ndvi_mean"] = gdf["ndvi_mean"].round(3)

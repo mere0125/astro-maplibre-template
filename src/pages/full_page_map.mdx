@@ -16,7 +16,8 @@ export const map = await loadMapConfig("./src/maps/full-page.yaml");
       <p class="map-note-kicker">vacant land - citywide context and one field study</p>
       <h1>the temporary forest</h1>
       <p>
-        Across New York City, 24,663 tax lots are currently coded as vacant.
+        PLUTO 26v2 records 24,663 vacant tax lots. This map locates 24,213;
+        the others have missing or empty boundaries.
         The warm East New York window is my pilot - 254 lots were screened,
         and 14 received a deeper historical and vegetation reading.
       </p>
@@ -41,14 +42,14 @@ export const map = await loadMapConfig("./src/maps/full-page.yaml");
       <div class="map-key-body">
         <div class="key-row"><i class="key-swatch citywide"></i><span>all NYC vacant tax lots</span></div>
         <div class="key-row"><i class="key-swatch screen"></i><span>East New York screening set</span></div>
-        <p class="key-label">14 analysed lots - vegetation in 2022</p>
+        <p class="key-label">14 lots - share of 2022 pixels with NDVI above 0.20</p>
         <div class="key-scale" aria-label="Vegetation response from low to high">
           <i style="--c:#e7e1cf"></i><i style="--c:#c9d6bb"></i><i style="--c:#91aa7d"></i><i style="--c:#4e7052"></i>
         </div>
-        <div class="key-scale-labels"><span>under 20%</span><span>80% or more</span></div>
+        <div class="key-scale-labels"><span>under 20%</span><span>20-50%</span><span>50-80%</span><span>80% or more</span></div>
         <p class="key-label">outline - vacancy history</p>
-        <div class="key-row"><i class="key-line old"></i><span>open by 1996</span></div>
-        <div class="key-row"><i class="key-line recent"></i><span>cleared by 2018</span></div>
+        <div class="key-row"><i class="key-line old"></i><span>open in 1996 and 2018</span></div>
+        <div class="key-row"><i class="key-line recent"></i><span>built in 1996, open in 2018</span></div>
       </div>
     </details>
   </FullPageMap>

@@ -1,0 +1,163 @@
+---
+import Head from "@components/Head.astro";
+import { url } from "@lib/utils";
+import "maplibre-gl/dist/maplibre-gl.css";
+import "../styles/assignment04.css";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <Head title="The Temporary Forest - a field index by Mere" description="Vacant land across New York City, with fourteen close readings of parcel history and 2022 vegetation response in East New York." />
+  </head>
+  <body class="assignment-four">
+    <a class="a4-skip" href="#field-notes">Skip to the field notes</a>
+    <div class="field-index" id="field-index" data-base={import.meta.env.BASE_URL}>
+      <aside class="field-notes" id="field-notes" aria-label="Project story and map controls">
+        <div class="field-brand">
+          <p class="field-byline">an unfinished atlas by Mere</p>
+          <h1>the temporary<br />forest</h1>
+          <p class="field-intro">A vacant-lot label tells us how land is recorded. It tells us much less about its surface, its past, or what might grow there.</p>
+          <nav class="field-scales" aria-label="Choose a geographic scale">
+            <button type="button" data-scale="city" aria-pressed="true">the city</button>
+            <button type="button" data-scale="study" aria-pressed="false">East New York</button>
+          </nav>
+        </div>
+
+        <section id="city-reading" class="city-reading">
+          <h2>One label, many places.</h2>
+          <p>The 2026 PLUTO release records <strong>24,663 vacant tax lots</strong> across the five boroughs. This map can locate 24,213 of them. The remaining records have missing or empty boundaries.</p>
+          <p>The pale green shapes are administrative records. Their colour does not say whether the land is bare, overgrown, accessible, or forested.</p>
+          <div id="borough-list" class="borough-list" aria-label="Vacant tax lots by borough"></div>
+          <p class="marginal-note">A place to begin, rather than an ecological inventory.</p>
+          <button type="button" class="text-action" id="enter-study">Look closely in East New York <span aria-hidden="true">→</span></button>
+        </section>
+
+        <section id="study-reading" class="study-reading" hidden>
+          <h2>At the scale of a lot.</h2>
+          <p>254 matched vacant parcels formed the pilot screening set. The 36 largest were read against two archival years; 14 had histories suitable for this descriptive comparison with 2022 imagery.</p>
+
+          <fieldset class="field-filter">
+            <legend>Look at</legend>
+            <label><input type="radio" name="reading" value="vegetation" checked /> vegetation in 2022</label>
+            <label><input type="radio" name="reading" value="history" /> the two historical readings</label>
+          </fieldset>
+
+          <div class="select-pair">
+            <label for="history-filter">Historical condition
+              <select id="history-filter">
+                <option value="all">Both histories</option>
+                <option value="open_in_both">Open in 1996 and 2018</option>
+                <option value="built_then_open">Built in 1996, open in 2018</option>
+              </select>
+            </label>
+            <label for="vegetation-filter">2022 vegetation response
+              <select id="vegetation-filter">
+                <option value="all">Every measured response</option>
+                <option value="0">Under 20 percent</option>
+                <option value="1">20 to under 50 percent</option>
+                <option value="2">50 to under 80 percent</option>
+                <option value="3">80 percent or more</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="list-heading"><p id="sample-count" role="status" aria-live="polite">14 parcels in view</p><button id="clear-filters" type="button">reset</button></div>
+          <p class="list-instruction">Choose an address, or click a dark-outlined parcel on the map.</p>
+          <div id="parcel-list" class="parcel-list" aria-label="Analysed parcels"></div>
+          <p id="no-parcels" class="empty-reading" hidden>No sampled parcels match both choices. Reset the filters to return to all 14.</p>
+          <p class="marginal-note">The sample is deliberately selected. These fourteen lots cannot represent the city as a whole.</p>
+        </section>
+
+        <details class="reading-method">
+          <summary>the evidence and its limits</summary>
+          <div>
+            <p><strong>Different dates, different evidence.</strong> 1996 and 2018 are aerial-image observations. 2022 is the vegetation measurement. 2026 is a PLUTO land-use classification, not a new aerial observation.</p>
+            <p><strong>Reading the green.</strong> The mapped percentage is the share of valid image pixels with NDVI greater than 0.20. NDVI is calculated as (near infrared − red) ÷ (near infrared + red). The threshold is exploratory.</p>
+            <p>Raster summaries include pixels touched by the current parcel boundary. Historical parcel boundaries and small edge effects may differ.</p>
+            <p>Two historical snapshots do not prove uninterrupted vacancy. NDVI does not identify trees, biodiversity, cooling, public access, or permanent forest.</p>
+            <p>The two sample groups have similar median responses: 63.1 percent and 63.6 percent. This small descriptive sample does not establish that earlier vacancy produces more vegetation.</p>
+          </div>
+        </details>
+
+        <details class="reading-method sources-detail">
+          <summary>sources and credits</summary>
+          <div>
+            <p><a href="https://data.cityofnewyork.us/City-Government/Primary-Land-Use-Tax-Lot-Output-PLUTO-/64uk-42ks" target="_blank" rel="noreferrer">NYC Department of City Planning - PLUTO and MapPLUTO 26v2</a>. Administrative land-use records. The 254-lot pilot uses the original matched tax-lot geometry from Assignment 2.</p>
+            <p><a href="https://maps.nyc.gov/" target="_blank" rel="noreferrer">NYC Office of Technology and Innovation</a> - aerial imagery from 1996 and 2018.</p>
+            <p><a href="https://imagery.geoplatform.gov/iipp/rest/services/NAIP/NAIP_plus/ImageServer" target="_blank" rel="noreferrer">USDA NAIP Plus</a> - 2022 four-band imagery. An official image crop was independently checked against the retained raster.</p>
+            <p>Geographic source layers and scripted raster analysis come from the earlier course work. This web index is an interactive companion to the final atlas proposal.</p>
+            <p><a href={url("assignment04-code-provenance.txt")} target="_blank">Code origins and AI contribution - text file</a><br /><a href="https://github.com/mere0125/astro-maplibre-template" target="_blank" rel="noreferrer">Project code and data</a></p>
+            <p class="credit-line">Mere - November 2026</p>
+          </div>
+        </details>
+        <a class="tutorial-back" href={url("full_page_map")}>tutorial map <span aria-hidden="true">↗</span></a>
+      </aside>
+
+      <main class="field-map-shell" aria-label="Interactive map and selected parcel evidence">
+        <div id="assignment-map" class="field-map" aria-label="Map of New York City vacant tax lots"></div>
+        <div class="map-caption" id="map-caption"><span class="caption-place" id="caption-place">New York City</span><span id="caption-detail">vacant tax-lot records - 26v2</span></div>
+        <div class="map-loading" id="map-loading" role="status">Opening the field index…</div>
+        <div class="map-status" id="map-status" role="alert" hidden></div>
+
+        <div class="field-map-tools" aria-label="Map tools">
+          <button type="button" id="map-zoom-in" aria-label="Zoom in">+</button>
+          <button type="button" id="map-zoom-out" aria-label="Zoom out">−</button>
+          <button type="button" id="map-home" aria-label="Return to the selected geographic scale">↺</button>
+          <button type="button" id="toggle-legend" aria-label="Show or hide the map key" aria-expanded="true" aria-controls="atlas-map-key" class="key-control">key</button>
+          <button type="button" id="map-north" class="north-control" aria-label="Reset the map to north"><span>N</span><svg viewBox="0 0 20 25" aria-hidden="true"><path d="M10 2 17 21 10 17 3 21Z" /></svg></button>
+        </div>
+
+        <section class="map-key" id="atlas-map-key" aria-label="Map legend">
+          <p class="key-title" id="key-title">vacant land records</p>
+          <div id="city-key"><div class="atlas-key-row"><i class="key-patch city-patch"></i><span>MapPLUTO vacant tax lot</span></div><div class="atlas-key-row"><i class="key-window"></i><span>pilot study window</span></div></div>
+          <div id="study-key" hidden>
+            <div class="vegetation-key" id="vegetation-key">
+              <p>Share of valid pixels with NDVI &gt; 0.20</p>
+              <div class="atlas-key-row"><i style="--swatch:#eee6cc"></i><span>under 20 percent</span></div>
+              <div class="atlas-key-row"><i style="--swatch:#cbd8b7"></i><span>20 to under 50 percent</span></div>
+              <div class="atlas-key-row"><i style="--swatch:#98b487"></i><span>50 to under 80 percent</span></div>
+              <div class="atlas-key-row"><i style="--swatch:#4c7257"></i><span>80 percent or more</span></div>
+              <p class="key-subtitle">Outline - historical snapshots</p>
+            </div>
+            <div class="atlas-key-row"><i class="key-stroke old-stroke"></i><span>open in 1996 and 2018</span></div>
+            <div class="atlas-key-row"><i class="key-stroke recent-stroke"></i><span>built in 1996, open in 2018</span></div>
+            <div class="atlas-key-row context-key"><i style="--swatch:#c8d3bb"></i><span>other screened parcels</span></div>
+          </div>
+        </section>
+
+        <section class="parcel-sheet" id="parcel-sheet" aria-label="Selected parcel evidence" hidden>
+          <button id="close-parcel" class="close-parcel" type="button" aria-label="Close parcel evidence">×</button>
+          <p class="parcel-heading-note">one close reading</p>
+          <h2 id="parcel-address"></h2>
+          <p id="parcel-identification" class="parcel-identification"></p>
+          <div class="record-strip" aria-label="Three dated observations">
+            <div><span>1996 - image</span><strong id="status-1996"></strong></div>
+            <div><span>2018 - image</span><strong id="status-2018"></strong></div>
+            <div><span>2026 - record</span><strong>coded vacant</strong></div>
+          </div>
+          <div class="image-modes" aria-label="Choose evidence imagery">
+            <button type="button" data-evidence="archive" aria-pressed="true">1996 to 2018</button>
+            <button type="button" data-evidence="2022" aria-pressed="false">the 2022 surface</button>
+          </div>
+          <div class="image-pair" id="image-pair">
+            <img id="image-back" alt="" />
+            <div class="image-front" id="image-front"><img id="image-front-img" alt="" /></div>
+            <div class="image-seam" id="image-seam" aria-hidden="true"></div>
+            <div class="image-label left" id="image-label-left">1996</div>
+            <div class="image-label right" id="image-label-right">2018</div>
+            <input type="range" id="image-comparison" min="0" max="100" value="50" aria-label="Compare the two dated aerial images" />
+          </div>
+          <p class="image-caption" id="image-caption">Move the divider to compare the same ground extent. The thin outline locates the present-day parcel.</p>
+          <div class="pixel-key" id="pixel-key" hidden><p>pixel NDVI - a different scale from the parcel legend</p><div></div><p><span>−0.2</span><span>0.2</span><span>0.8</span></p></div>
+          <div class="parcel-measure"><p><strong id="vegetation-value"></strong><span>of valid parcel pixels above NDVI 0.20 in 2022</span></p><div class="response-track" aria-hidden="true"><span id="response-fill"></span></div><p class="response-detail" id="response-detail"></p></div>
+          <p class="parcel-caution">An image reading of the surface - not a survey of trees or habitat.</p>
+        </section>
+        <p class="map-projection">Web Mercator - EPSG 3857</p>
+      </main>
+    </div>
+    <script>
+      import "../scripts/assignment04";
+    </script>
+  </body>
+</html>

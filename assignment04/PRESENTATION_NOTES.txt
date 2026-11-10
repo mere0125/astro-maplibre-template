@@ -1,0 +1,50 @@
+The Temporary Forest
+Assignment 4 - two-minute presentation
+Mere Cui
+
+My project, The Temporary Forest, asks what becomes visible when vacant
+land is read as a living surface rather than only an administrative
+category. This website is an interactive field index for that larger
+atlas. It moves from all five boroughs to an East New York pilot and
+finally to individual lots.
+
+At the city scale, the map starts with PLUTO records classified as vacant
+land. The inventory contains 24,663 records, but only 24,213 have usable
+geometry. Keeping those counts separate makes the coverage of the map
+explicit.
+
+Inside East New York, I return to the original 254-lot screening window.
+Fourteen parcels have comparable historical observations and vegetation
+measurements. Eight appear open in both 1996 and 2018. Six show a building
+in 1996 and open ground in 2018. Their current vacant status comes from
+the 2026 administrative record.
+
+Selecting a lot lets the viewer compare dated aerial images and inspect
+its 2022 vegetation response. The percentage measures image pixels with
+NDVI above 0.20. It is a spectral indicator, not a measurement of forest
+or habitat quality. Filters make the historical groups and vegetation
+classes easier to compare.
+
+The two groups have almost identical median responses, around 63 percent.
+This small sample therefore does not support the assumption that older
+vacancy automatically becomes greener.
+
+I gave the interface the feeling of a quiet field notebook, with sage
+colours, Times typography, botanical details, and parcel-shaped marks.
+The interactions invite close observation while keeping uncertainty
+visible. They show where the atlas needs more evidence, especially field
+observations, rather than presenting every green lot as a temporary
+forest.
+
+Presentation sequence
+
+1. Start at New York City and point out the distinction between records
+   and mapped features.
+2. Enter East New York and explain the 254-lot screening context and the
+   fourteen analysed sites.
+3. Select one parcel. Compare two dated images and read its NDVI result.
+4. Use one filter to show that the interface supports exploration.
+5. End with the similar group medians and the need for field observation.
+
+The code origins and OpenAI Codex implementation assistance are disclosed
+in the accompanying CODE_PROVENANCE.txt file.

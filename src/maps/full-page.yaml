@@ -8,8 +8,8 @@ config:
   zoom: 9.45
 
 layers:
-  # NYC-wide context. These are the actual polygons for all 24,663 tax lots
-  # coded Vacant Land (LandUse 11) in PLUTO/MapPLUTO 26v2. They are context,
+  # NYC-wide context. These are 24,213 nonempty polygons from the 24,663
+  # records coded Vacant Land (LandUse 11) in PLUTO/MapPLUTO 26v2. They are context,
   # not parcels for which the historical or NDVI analysis has been completed.
   - id: citywide-vacant-land
     type: fill
@@ -18,7 +18,7 @@ layers:
     maxzoom: 12
     source:
       type: geojson
-      url: "/data/nyc_vacant_land_26v2.geojson"
+      url: "/data/assignment04/citywide.geojson"
     paint:
       fill-color: "#6f846a"
       fill-opacity: 0.68
@@ -46,7 +46,7 @@ layers:
     minzoom: 11.5
     source:
       type: geojson
-      url: "/data/east_new_york_screening_lots.geojson"
+      url: "/data/assignment04/screening.geojson"
     paint:
       fill-color: "#c8d4c0"
       fill-opacity: 0.66
@@ -74,18 +74,18 @@ layers:
               - property: address
                 else: Address not recorded
           - p:
-              - str: "Vegetated pixels in 2022: "
+              - str: "2022 pixels with NDVI above 0.20: "
               - property: veg_pct
               - str: "%"
           - p:
               - str: "Mean NDVI: "
               - property: ndvi_mean
           - p:
-              - str: "Vacancy history: "
-              - property: duration_group
+              - str: "Historical images: "
+              - property: archive_evidence
           - p:
-              - str: "Image evidence: "
-              - property: evidence_years
+              - str: "Current status: "
+              - property: current_record
 
   # Categorical colour, taught in Interactive Mapping Part 2. The outline
   # separates the two historical evidence groups without covering the NDVI
@@ -99,7 +99,7 @@ layers:
       type: geojson
       url: "/data/temporary_forest_parcels.geojson"
     paint:
-      line-color: ["match", ["get", "duration_group"], "long-open by 1996", "#3e5848", "cleared between 1996 and 2018", "#b27855", "#5f665d"]
+      line-color: ["get", "duration_color"]
       line-opacity: 0.96
       line-width: ["interpolate", ["linear"], ["zoom"], 11.5, 1.2, 15, 2.8]
 
@@ -128,9 +128,9 @@ layers:
               - property: address
                 else: Address not recorded
           - p:
-              - str: "Vegetated pixels in 2022: "
+              - str: "2022 pixels with NDVI above 0.20: "
               - property: veg_pct
               - str: "%"
           - p:
-              - str: "Vacancy history: "
-              - property: duration_group
+              - str: "Historical images: "
+              - property: archive_evidence

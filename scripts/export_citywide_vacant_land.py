@@ -6,9 +6,11 @@ this build is the `nyc_pluto.parquet` file distributed by the open-source
 `nycpluto` package, which reproduces NYC Department of City Planning's 26v2
 release and preserves the MapPLUTO lot polygons.
 
-Only tax lots with PLUTO LandUse code 11 (Vacant Land) are exported.  The
-East New York screening set is the exact 5,540 x 5,327 ft window used in the
-earlier QGIS assignments; 254 of the current vacant lots fall wholly inside.
+Only tax lots with PLUTO LandUse code 11 (Vacant Land) and nonempty geometry
+are mapped. The 24,663 administrative records include 423 null and 27 empty
+geometries, leaving 24,213 mapped features. The East New York screening set
+is read directly from the original matched 254-lot GIS layer rather than
+reconstructed from its bounding rectangle.
 The fourteen parcels with historical and NDVI evidence are exported by the
 separate `export_temporary_forest_web_data.py` script.
 """
@@ -71,12 +73,13 @@ def main() -> None:
 
     # A two-foot simplification is below the line weight at citywide web-map
     # scale, while reducing the download from the full tax-lot geometry.
-    citywide = lots.copy()
+    citywide = lots.loc[lots.geometry.notna() & ~lots.geometry.is_empty].copy()
     citywide["geometry"] = citywide.geometry.simplify(2, preserve_topology=True)
     citywide = citywide.to_crs(4326)
 
     study_window = box(*STUDY_BOUNDS_2263)
-    screened = lots[lots.within(study_window)].copy().to_crs(4326)
+    original_screen = ROOT.parents[1] / "assignment03/data/original/vacant_lots_current_mappluto26v2.gpkg"
+    screened = gpd.read_file(original_screen).to_crs(4326)
     screened["map_role"] = "East New York screening set"
 
     window = gpd.GeoDataFrame(
@@ -96,7 +99,7 @@ def main() -> None:
     write_geojson(screened, OUT_DIR / "east_new_york_screening_lots.geojson")
     write_geojson(window, OUT_DIR / "east_new_york_study_window.geojson")
 
-    print(f"Citywide vacant lots: {len(citywide):,}")
+    print(f"Citywide administrative records: {len(lots):,}; mapped features: {len(citywide):,}")
     print(f"East New York screening set: {len(screened):,}")
 
 
