@@ -1,27 +1,57 @@
 import PageLayout from "@layouts/PageLayout.astro";
 import { SITE } from "@consts";
+import { url as siteUrl } from "@lib/utils";
 import { FullPageMap, loadMapConfig } from "@maplibre-yaml/astro";
 
-{/* The map is src/maps/full-page.yaml. It is checked when the site builds. */}
 export const map = await loadMapConfig("./src/maps/full-page.yaml");
 
-<PageLayout title="Temporary Forest evidence sites" description={SITE.DESCRIPTION} bleed>
-  {/* FullPageMap covers the whole window; `style` starts it below the site header. */}
+<PageLayout title="The Temporary Forest" description={SITE.DESCRIPTION} bleed>
   <FullPageMap
+    id="temporary-forest-map"
     config={map}
+    quiet
     style="top: var(--header-h); height: calc(100vh - var(--header-h));"
   >
-    <div slot="top-left" class="map-note hidden sm:block max-w-80">
-      <p class="map-note-kicker">East New York - evidence sites</p>
-      <h1>The Temporary Forest</h1>
+    <aside slot="top-left" class="map-note">
+      <p class="map-note-kicker">vacant land - citywide context and one field study</p>
+      <h1>the temporary forest</h1>
       <p>
-        Fourteen current vacant lots, read through vacancy history and the
-        share of 2022 aerial-image pixels with an NDVI response above 0.20.
+        Across New York City, 24,663 tax lots are currently coded as vacant.
+        The warm East New York window is my pilot - 254 lots were screened,
+        and 14 received a deeper historical and vegetation reading.
       </p>
-      <p class="map-note-hint">Click a circle to read one site's evidence.</p>
+      <div class="map-view-switch" aria-label="Choose map scale">
+        <button type="button" data-map-view="city" aria-pressed="true">New York City</button>
+        <button type="button" data-map-view="study" aria-pressed="false">field study</button>
+      </div>
+      <p class="map-note-hint">
+        Switch scales, then click one of the 14 dark-outlined parcels to read
+        its evidence. The pilot is not a citywide conclusion.
+      </p>
       <p class="map-note-source">
-        Sources - MapPLUTO 26v2, NYC OTI orthophotos 1996 and 2018, USDA NAIP 2022
+        PLUTO and MapPLUTO 26v2 - NYC Department of City Planning<br />
+        1996 and 2018 orthophotos - NYC OTI<br />
+        2022 NAIP imagery - USDA<br />
+        map and analysis - Mere Cui, 2026
       </p>
-    </div>
+    </aside>
+
+    <details slot="bottom-right" class="map-key" open>
+      <summary>how to read this map</summary>
+      <div class="map-key-body">
+        <div class="key-row"><i class="key-swatch citywide"></i><span>all NYC vacant tax lots</span></div>
+        <div class="key-row"><i class="key-swatch screen"></i><span>East New York screening set</span></div>
+        <p class="key-label">14 analysed lots - vegetation in 2022</p>
+        <div class="key-scale" aria-label="Vegetation response from low to high">
+          <i style="--c:#e7e1cf"></i><i style="--c:#c9d6bb"></i><i style="--c:#91aa7d"></i><i style="--c:#4e7052"></i>
+        </div>
+        <div class="key-scale-labels"><span>under 20%</span><span>80% or more</span></div>
+        <p class="key-label">outline - vacancy history</p>
+        <div class="key-row"><i class="key-line old"></i><span>open by 1996</span></div>
+        <div class="key-row"><i class="key-line recent"></i><span>cleared by 2018</span></div>
+      </div>
+    </details>
   </FullPageMap>
+
+  <script is:inline src={siteUrl("map-view-switch.js")}></script>
 </PageLayout>

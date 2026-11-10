@@ -4,33 +4,67 @@ id: temporary-forest-evidence
 
 config:
   mapStyle: "/style.json"
-  center: [-73.8859, 40.6708]
-  zoom: 14
-
-legend:
-  position: bottom-left
-  title: Reading the map
-  items:
-    - { label: "Open in 1996, 2018, and 2026", color: "#78996d", shape: square }
-    - { label: "Cleared between 1996 and 2018", color: "#c9a57d", shape: square }
-    - { label: "Vegetation under 20 percent", color: "#ddd7ca", shape: circle }
-    - { label: "Vegetation 20 to under 50 percent", color: "#c4d3b8", shape: circle }
-    - { label: "Vegetation 50 to under 80 percent", color: "#91ad82", shape: circle }
-    - { label: "Vegetation 80 percent or more", color: "#496b47", shape: circle }
+  center: [-73.93, 40.70]
+  zoom: 9.45
 
 layers:
-  # Categorical representation. The hex value was calculated from each
-  # parcel's duration_group before export, then read with MapLibre get syntax.
-  - id: vacancy-history
+  # NYC-wide context. These are the actual polygons for all 24,663 tax lots
+  # coded Vacant Land (LandUse 11) in PLUTO/MapPLUTO 26v2. They are context,
+  # not parcels for which the historical or NDVI analysis has been completed.
+  - id: citywide-vacant-land
     type: fill
-    label: Vacancy history
+    label: NYC vacant tax lots - context
+    toggleable: false
+    maxzoom: 12
+    source:
+      type: geojson
+      url: "/data/nyc_vacant_land_26v2.geojson"
+    paint:
+      fill-color: "#6f846a"
+      fill-opacity: 0.68
+
+  # The screen used in Assignments 2 and 3. Its rectangular edge is a method
+  # boundary, not an official neighbourhood boundary.
+  - id: field-study-window
+    type: fill
+    label: East New York field-study window
+    toggleable: false
+    source:
+      type: geojson
+      url: "/data/east_new_york_study_window.geojson"
+    paint:
+      fill-color: "#d9ab7d"
+      fill-opacity: ["interpolate", ["linear"], ["zoom"], 9, 0.14, 12, 0.05, 15, 0.02]
+      fill-outline-color: "#aa7651"
+
+  # At neighbourhood scale the 254 current vacant lots in the screening
+  # window replace the citywide layer so their real parcel shapes stay clear.
+  - id: screening-lots
+    type: fill
+    label: 254 lots screened in East New York
+    toggleable: false
+    minzoom: 11.5
+    source:
+      type: geojson
+      url: "/data/east_new_york_screening_lots.geojson"
+    paint:
+      fill-color: "#c8d4c0"
+      fill-opacity: 0.66
+      fill-outline-color: "#91a18b"
+
+  # Numeric stepped colour, taught in Interactive Mapping Part 3. Unlike the
+  # earlier bubble view, colour stays inside each real parcel footprint.
+  - id: vegetation-response
+    type: fill
+    label: 14 analysed lots - vegetation response
+    toggleable: false
+    minzoom: 11.5
     source:
       type: geojson
       url: "/data/temporary_forest_parcels.geojson"
     paint:
-      fill-color: ["get", "duration_color"]
-      fill-opacity: 0.5
-      fill-outline-color: "#586252"
+      fill-color: ["step", ["get", "veg_pct"], "#e7e1cf", 20, "#c9d6bb", 50, "#91aa7d", 80, "#4e7052"]
+      fill-opacity: 0.86
     interactive:
       hover:
         cursor: pointer
@@ -40,67 +74,51 @@ layers:
               - property: address
                 else: Address not recorded
           - p:
-              - str: "Vacancy history: "
-              - property: duration_group
-          - p:
-              - str: "Evidence: "
-              - property: evidence_years
-          - p:
-              - str: "2022 vegetation response: "
-              - property: veg_pct
-              - str: "% of parcel pixels"
-
-  # Numeric representation. Circle size is stepped by the parcel's 2022
-  # vegetation response, following the tutorial's step-expression method.
-  - id: vegetation-size
-    type: circle
-    label: Vegetation cover - size view
-    source:
-      type: geojson
-      url: "/data/temporary_forest_sites.geojson"
-    paint:
-      circle-color: "#526b4c"
-      circle-opacity: 0.84
-      circle-stroke-color: "#fbf7ec"
-      circle-stroke-width: 1.5
-      circle-radius: ["step", ["get", "veg_pct"], 3, 20, 5, 50, 8, 80, 12]
-    interactive:
-      hover:
-        cursor: pointer
-      click:
-        popup:
-          - h3:
-              - property: address
-                else: Address not recorded
-          - p:
-              - str: "Vegetation response: "
+              - str: "Vegetated pixels in 2022: "
               - property: veg_pct
               - str: "%"
-          - p:
-              - str: "Class: "
-              - property: vegetation_class
           - p:
               - str: "Mean NDVI: "
               - property: ndvi_mean
           - p:
               - str: "Vacancy history: "
               - property: duration_group
+          - p:
+              - str: "Image evidence: "
+              - property: evidence_years
 
-  # A second numeric view demonstrates stepped colour. It starts off so the
-  # two circle representations do not obscure one another.
-  - id: vegetation-colour
+  # Categorical colour, taught in Interactive Mapping Part 2. The outline
+  # separates the two historical evidence groups without covering the NDVI
+  # fill colours.
+  - id: vacancy-history-outline
+    type: line
+    label: 14 analysed lots - vacancy history
+    toggleable: false
+    minzoom: 11.5
+    source:
+      type: geojson
+      url: "/data/temporary_forest_parcels.geojson"
+    paint:
+      line-color: ["match", ["get", "duration_group"], "long-open by 1996", "#3e5848", "cleared between 1996 and 2018", "#b27855", "#5f665d"]
+      line-opacity: 0.96
+      line-width: ["interpolate", ["linear"], ["zoom"], 11.5, 1.2, 15, 2.8]
+
+  # Optional tutorial comparison: the same numeric field controls circle size.
+  # It remains off by default so the primary map is not buried under bubbles.
+  - id: vegetation-size-comparison
     type: circle
-    label: Vegetation cover - colour view
+    label: Show circles - size comparison
     visible: false
+    minzoom: 11.5
     source:
       type: geojson
       url: "/data/temporary_forest_sites.geojson"
     paint:
-      circle-radius: 8
-      circle-color: ["step", ["get", "veg_pct"], "#ddd7ca", 20, "#c4d3b8", 50, "#91ad82", 80, "#496b47"]
-      circle-opacity: 0.9
-      circle-stroke-color: "#fbf7ec"
-      circle-stroke-width: 1.5
+      circle-color: "#526b4c"
+      circle-opacity: 0.78
+      circle-stroke-color: "#faf6eb"
+      circle-stroke-width: 1.25
+      circle-radius: ["step", ["get", "veg_pct"], 3, 20, 5, 50, 8, 80, 11]
     interactive:
       hover:
         cursor: pointer
@@ -110,7 +128,7 @@ layers:
               - property: address
                 else: Address not recorded
           - p:
-              - str: "Vegetation response: "
+              - str: "Vegetated pixels in 2022: "
               - property: veg_pct
               - str: "%"
           - p:

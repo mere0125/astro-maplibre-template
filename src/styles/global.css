@@ -13,7 +13,7 @@
 
 :root {
   /* Height of the fixed site header. Full-page maps and stories start below it. */
-  --header-h: 4rem;
+  --header-h: 3.35rem;
 }
 
 @layer base {
@@ -46,7 +46,8 @@
   header {
     @apply fixed top-0 left-0 right-0 z-50 flex items-center;
     height: var(--header-h);
-    background: color-mix(in srgb, #eef1e9 82%, transparent);
+    background: color-mix(in srgb, #edf0e8 90%, transparent);
+    border-bottom: 1px solid rgb(64 79 61 / 10%);
     @apply backdrop-blur-sm saturate-200;
   }
 
@@ -102,50 +103,179 @@
 
 @layer components {
   .map-note {
-    border: 1px solid rgb(72 86 65 / 22%);
-    background: rgb(247 246 238 / 92%);
-    padding: 1rem 1.1rem 0.95rem;
-    color: #394236;
-    box-shadow: 0 10px 28px rgb(48 61 45 / 10%);
-    backdrop-filter: blur(8px);
+    width: min(21.5rem, calc(100vw - 2rem));
+    border: 1px solid rgb(67 83 63 / 18%);
+    border-radius: 2px 16px 3px 2px;
+    background: rgb(248 246 237 / 93%);
+    padding: 1.05rem 1.15rem 1rem;
+    color: #344033;
+    box-shadow: 0 8px 24px rgb(42 56 40 / 8%);
+    backdrop-filter: blur(9px);
   }
 
   .map-note h1 {
-    margin: 0.15rem 0 0.45rem;
+    margin: 0.22rem 0 0.62rem;
     font-family: "Times New Roman", Times, serif;
-    font-size: 1.65rem;
+    font-size: 1.82rem;
     font-weight: 400;
-    line-height: 1.05;
+    line-height: 1;
+    letter-spacing: -0.015em;
   }
 
   .map-note p {
     margin: 0;
     font-family: "Times New Roman", Times, serif;
-    line-height: 1.35;
+    font-size: 0.92rem;
+    line-height: 1.42;
   }
 
   .map-note .map-note-kicker,
   .map-note .map-note-hint,
   .map-note .map-note-source {
     font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-    font-size: 0.69rem;
-    letter-spacing: 0.04em;
+    font-size: 0.67rem;
+    letter-spacing: 0.035em;
   }
 
   .map-note .map-note-kicker {
-    color: #6c7966;
+    color: #6f7c68;
+    text-transform: lowercase;
   }
 
   .map-note .map-note-hint {
-    margin-top: 0.7rem;
-    color: #788171;
+    margin-top: 0.72rem;
+    color: #6e7769;
+    letter-spacing: 0.015em;
   }
 
   .map-note .map-note-source {
-    margin-top: 0.45rem;
-    color: #879080;
-    font-size: 0.62rem;
-    line-height: 1.3;
+    margin-top: 0.68rem;
+    padding-top: 0.55rem;
+    border-top: 1px solid rgb(67 83 63 / 14%);
+    color: #7d8578;
+    font-size: 0.59rem;
+    line-height: 1.38;
+  }
+
+  .map-view-switch {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin-top: 0.88rem;
+    border-top: 1px solid rgb(67 83 63 / 20%);
+    border-bottom: 1px solid rgb(67 83 63 / 20%);
+  }
+
+  .map-view-switch button {
+    padding: 0.46rem 0.22rem 0.42rem;
+    border: 0;
+    background: transparent;
+    color: #657060;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: color 160ms ease, background 160ms ease;
+  }
+
+  .map-view-switch button + button {
+    border-left: 1px solid rgb(67 83 63 / 20%);
+  }
+
+  .map-view-switch button[aria-pressed="true"] {
+    background: rgb(115 137 106 / 12%);
+    color: #324232;
+  }
+
+  .map-view-switch button:hover {
+    color: #263525;
+  }
+
+  .map-key {
+    width: 15.4rem;
+    border: 1px solid rgb(67 83 63 / 17%);
+    border-radius: 2px 12px 2px 2px;
+    background: rgb(248 246 237 / 91%);
+    color: #3c473a;
+    box-shadow: 0 7px 20px rgb(42 56 40 / 7%);
+    backdrop-filter: blur(8px);
+    font-family: "Times New Roman", Times, serif;
+  }
+
+  .map-key summary {
+    padding: 0.58rem 0.72rem;
+    cursor: pointer;
+    font-size: 0.81rem;
+    list-style-position: inside;
+  }
+
+  .map-key-body {
+    padding: 0 0.75rem 0.72rem;
+    font-size: 0.72rem;
+  }
+
+  .key-row {
+    display: flex;
+    align-items: center;
+    gap: 0.48rem;
+    min-height: 1.22rem;
+  }
+
+  .key-swatch {
+    display: block;
+    width: 0.78rem;
+    height: 0.58rem;
+    border: 1px solid rgb(61 75 57 / 30%);
+  }
+
+  .key-swatch.citywide { background: #6f846a; }
+  .key-swatch.screen { background: #c8d4c0; }
+
+  .key-label {
+    margin: 0.52rem 0 0.25rem;
+    color: #697264;
+    font-size: 0.64rem;
+  }
+
+  .key-scale {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    height: 0.48rem;
+    overflow: hidden;
+    border: 1px solid rgb(61 75 57 / 24%);
+  }
+
+  .key-scale i { background: var(--c); }
+
+  .key-scale-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.14rem;
+    color: #727a6e;
+    font-size: 0.59rem;
+  }
+
+  .key-line {
+    display: block;
+    width: 0.82rem;
+    height: 0;
+    border-top: 2px solid;
+  }
+
+  .key-line.old { border-color: #3e5848; }
+  .key-line.recent { border-color: #b27855; }
+
+  @media (max-width: 639px) {
+    .map-note {
+      width: calc(100vw - 1.25rem);
+      max-height: 13rem;
+      padding: 0.8rem 0.9rem 0.75rem;
+      overflow: auto;
+    }
+
+    .map-note h1 { font-size: 1.52rem; }
+    .map-note p { font-size: 0.82rem; }
+    .map-note .map-note-source { display: none; }
+    .map-key { width: 13.5rem; }
   }
 }
 
@@ -192,9 +322,66 @@
   }
 }
 
-/* Maps: popups use dark text even in dark mode (their background is white). */
+/* Finished map controls and popups share the soft field-note palette. */
+.ml-fullpage-map .ml-control-btn {
+  width: 34px !important;
+  height: 34px !important;
+  border: 1px solid rgb(67 83 63 / 16%) !important;
+  border-radius: 50% !important;
+  background: rgb(248 246 237 / 92%) !important;
+  color: #586653 !important;
+  box-shadow: 0 4px 14px rgb(42 56 40 / 8%) !important;
+}
+
+.ml-fullpage-map .ml-map-params {
+  min-width: 0 !important;
+  padding: 0.46rem 0.62rem !important;
+  border: 1px solid rgb(67 83 63 / 16%) !important;
+  border-radius: 10px 2px 2px 10px !important;
+  background: rgb(248 246 237 / 91%) !important;
+  color: #596454 !important;
+  box-shadow: 0 5px 17px rgb(42 56 40 / 8%) !important;
+  font: 0.69rem/1.35 "Times New Roman", Times, serif !important;
+  backdrop-filter: blur(8px);
+}
+
+.ml-fullpage-map .ml-map-params-row {
+  margin: 0 !important;
+}
+
 .maplibregl-popup-content {
-  color: #333;
+  width: min(18rem, calc(100vw - 3rem));
+  padding: 0.9rem 1rem 0.88rem;
+  border: 1px solid rgb(67 83 63 / 17%);
+  border-radius: 2px 13px 3px 2px;
+  background: rgb(250 248 240 / 97%);
+  color: #344033;
+  box-shadow: 0 9px 28px rgb(42 56 40 / 13%);
+  font-family: "Times New Roman", Times, serif;
+}
+
+.maplibregl-popup-content h3 {
+  margin: 0 1rem 0.5rem 0;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 1.05rem;
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+.maplibregl-popup-content p {
+  margin: 0.25rem 0;
+  font-size: 0.78rem;
+  line-height: 1.32;
+}
+
+.maplibregl-popup-close-button {
+  padding: 0.3rem 0.5rem;
+  color: #6e786a;
+  font-size: 1.05rem;
+}
+
+.maplibregl-popup-tip {
+  border-top-color: rgb(250 248 240 / 97%) !important;
 }
 
 /* The story's map sticks below the fixed site header. (`html` in front makes
